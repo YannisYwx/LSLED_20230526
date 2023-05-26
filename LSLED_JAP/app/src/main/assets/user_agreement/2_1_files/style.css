@@ -1,0 +1,193 @@
+﻿sup {
+	vertical-align: baseline;
+	position: relative;
+	top: -0.4em;
+}
+sub {
+	vertical-align: baseline;
+	position: relative;
+	top: 0.4em;
+}
+a:link {text-decoration:none;}
+a:visited {text-decoration:none;}
+@media screen and (min-device-pixel-ratio:0), (-webkit-min-device-pixel-ratio:0), (min--moz-device-pixel-ratio: 0) {.stl_view{ font-size:10em; transform:scale(0.1); -moz-transform:scale(0.1); -webkit-transform:scale(0.1); -moz-transform-origin:top left; -webkit-transform-origin:top left; } }
+.layer { }.ie { font-size: 1pt; }
+.ie body { font-size: 12em; }
+@media print{.stl_view {font-size:1em; transform:scale(1);}}
+.grlink { position:relative;width:100%;height:100%;z-index:1000000; }
+.stl_01 {
+	position: absolute;
+	white-space: nowrap;
+}
+.stl_02 {
+	font-size: 1em;
+	line-height: 0.0em;
+	width: 51em;
+	height: 66em;
+	border-style: none;
+	display: block;
+	margin: 0em;
+}
+
+@supports(-ms-ime-align:auto) { .stl_02 {overflow: hidden;}}
+.stl_03 {
+	position: relative;
+	width: 51em;
+}
+.stl_04 {
+	height: 6.6em;
+}
+.ie .stl_04 {
+	height: 66em;
+}
+@font-face {
+	font-family:"KDPVMJ+TimesNewRomanPSMT";
+	src:url("../fonts/212163ae-0000-0000-0000-000000000000.woff") format("woff");
+}
+.stl_05 {
+	font-size: 0.92em;
+	font-family: "KDPVMJ+TimesNewRomanPSMT";
+	color: #000000;
+}
+.stl_06 {
+	line-height: 1.107422em;
+}
+.stl_07 {
+	letter-spacing: -0.0014em;
+}
+
+.ie .stl_07 {
+	letter-spacing: -0.02px;
+}
+.stl_08 {
+	letter-spacing: -0.0015em;
+}
+
+.ie .stl_08 {
+	letter-spacing: -0.0221px;
+}
+.stl_09 {
+	letter-spacing: -0.0018em;
+}
+
+.ie .stl_09 {
+	letter-spacing: -0.0265px;
+}
+.stl_10 {
+	letter-spacing: -0.0016em;
+}
+
+.ie .stl_10 {
+	letter-spacing: -0.0233px;
+}
+.stl_11 {
+	letter-spacing: -0.0013em;
+}
+
+.ie .stl_11 {
+	letter-spacing: -0.0198px;
+}
+.stl_12 {
+	letter-spacing: -0.0017em;
+}
+
+.ie .stl_12 {
+	letter-spacing: -0.0252px;
+}
+.stl_13 {
+	-o-transform: scale(1,0.9803921);
+	-webkit-transform: scale(1,0.9803921);
+	-moz-transform: scale(1,0.9803921);
+	transform: scale(1,0.9803921);
+	-o-transform-origin: top left;
+	-webkit-transform-origin: top left;
+	-moz-webkit-transform-origin: top left;
+	-transform-origin: top left;
+	-ms-transform: matrix(1,0,0,0.9803921,0,-0);
+	-ms-transform-origin: top left;
+}
+@font-face {
+	font-family:"JKNJFN+SimSun";
+	src:url("../fonts/3856fe8e-0000-0000-0000-000000000000.woff") format("woff");
+}
+.stl_14 {
+	font-size: 1.34em;
+	font-family: "JKNJFN+SimSun", "Times New Roman";
+	color: #000000;
+}
+.stl_15 {
+	line-height: 1em;
+}
+.stl_16 {
+	letter-spacing: -0.0011em;
+}
+
+.ie .stl_16 {
+	letter-spacing: -0.0236px;
+}
+@font-face {
+	font-family:"NRGCNG+SimSun";
+	src:url("../fonts/ad64bdee-0000-0000-0000-000000000000.woff") format("woff");
+}
+.stl_17 {
+	font-size: 1.34em;
+	font-family: "NRGCNG+SimSun";
+	color: #000000;
+}
+@font-face {
+	font-family:"DJQCHA+TimesNewRomanPS-BoldMT";
+	src:url("../fonts/4de469a5-0000-0000-0000-000000000000.woff") format("woff");
+}
+.stl_18 {
+	font-size: 1.34em;
+	font-family: "DJQCHA+TimesNewRomanPS-BoldMT";
+	color: #000000;
+}
+.stl_19 {
+	letter-spacing: -0.0025em;
+}
+
+.ie .stl_19 {
+	letter-spacing: -0.0543px;
+}
+.stl_20 {
+	font-size: 0.92em;
+	font-family: "JKNJFN+SimSun", "Times New Roman";
+	color: #000000;
+}
+.stl_21 {
+	letter-spacing: -0.0036em;
+}
+
+.ie .stl_21 {
+	letter-spacing: -0.053px;
+}
+.stl_22 {
+	font-size: 0.92em;
+	font-family: "NRGCNG+SimSun";
+	color: #000000;
+}
+@font-face {
+	font-family:"QTUIAQ+Calibri";
+	src:url("../fonts/f558c7c3-0000-0000-0000-000000000000.woff") format("woff");
+}
+.stl_23 {
+	font-size: 0.92em;
+	font-family: "QTUIAQ+Calibri";
+	color: #000000;
+}
+.stl_24 {
+	line-height: 1.220703em;
+}
+@font-face {
+	font-family:"HNIBQL+DengXian-Regular";
+	src:url("../fonts/d71b1cf8-0000-0000-0000-000000000000.woff") format("woff");
+}
+.stl_25 {
+	font-size: 0.92em;
+	font-family: "HNIBQL+DengXian-Regular", "Times New Roman";
+	color: #000000;
+}
+.stl_26 {
+	line-height: 1.041992em;
+}

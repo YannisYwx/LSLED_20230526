@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">LEDBadge</string>
+    <string name="title_sendList">전송 목록</string>
+    <string name="settings">설정</string>
+    <string name="edit">편집</string>
+    <string name="about">정보</string>
+    <string name="delete_pic">그림삭제</string>
+    <string name="edit_pic">그림편집</string>
+    <string name="pick_pic">그림선택</string>
+    <string name="origin_pic">[원본]</string>
+    <string name="gray_pic">[흑백]</string>
+    <string name="reset_btn">재 치</string>
+    <string name="scroll_btn">구르다</string>
+    <string name="draw_btn">손잡다</string>
+    <string name="reverse_btn">반대색</string>
+    <string name="return_back">복귀</string>
+    <string name="same_model_exist">같은 그림</string>
+    <string name="save_Succeed">저장 성</string>
+    <string name="no_data">데이터가 없다</string>
+    <string name="cancel">취소</string>
+    <string name="send_content">송신 내용</string>
+    <array name="speedStr">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>7</item>
+        <item>8</item>
+    </array>
+    <!--
+
+눈송이	     ->           왼쪽
+아래로	     ->           오른쪽
+고정	    ->            위로
+최대	    ->            아래로
+오른쪽	   ->             고정
+애니메이션  ->	    애니메이션
+왼쪽	   ->             스노우
+사진	   ->             펼치기
+레이져	   ->              레이져
+
+
+
+    -->
+    <array name="modestr">
+        <item>왼쪽</item>
+        <item>오른쪽</item>
+        <item>위로</item>
+        <item>아래로</item>
+        <item>고정</item>
+        <item>애니메이션</item>
+        <item>스노우</item>
+        <item>펼치기</item>
+        <item>레이저</item>
+    </array>
+    <string name="title_dianzheng">정점진을 설치하다.</string>
+    <string name="msg_dianzheng">정점진을 설치하다.</string>
+    <string name="sure">확정</string>
+    <string name="exit">출구</string>
+
+    <string name="cannot_send_empty">빈 소식 을 보 낼 수 없 게 된 다</string>
+    <string name="save_msg_success">보존 정보 성공</string>
+    <string name="save_msg_fail">보존 정보 실패</string>
+    <string name="not_get_data">데이터 커서 얻지 못했다.</string>
+    <string name="cannt_open_db">열 지 않 아요? 데이터베이스 이다</string>
+    <string name="save_success">보존 성공</string>
+    <string name="save_fail">보존 실패</string>
+    <string name="send_over">보냈습니다</string>
+    <string name="connect_success">연결 성공</string>
+    <string name="data_load_fail">データ負荷失敗</string>
+
+    <string name="diangzheng11">11격자</string>
+    <string name="diangzheng12">12격자</string>
+    <string name="diangzheng16">16격자</string>
+    <string name="chooise">선택</string>
+    <string name="daozi">오히려 글자를</string>
+    <string name="msg">정보</string>
+    <string name="speed">속도</string>
+    <string name="mode">모드</string>
+    <string name="flash">반짝이다</string>
+    <string name="marquee">순환 램프</string>
+    <string name="save">저장</string>
+    <string name="send">보내기</string>
+    <string name="pix">격자</string>
+    <string name="colors">颜色</string>
+
+    <string name="no_device_found">장치를 찾을 수 없음</string>
+    <string name="open_ble">허용 열 블루투스</string>
+    <string name="open_coarse_location">위치 추적 권한</string>
+    <string name="not_scan_device">찾을 수 없음</string>
+    <string name="connecting">연결 장치 중</string>
+    <string name="searching">검색 중</string>
+    <string name="send_timeout">발송 시간 초과</string>
+    <string name="send_failed">보내기 실패</string>
+    <string name="sending_data">데이터 전송 중</string>
+    <string name="send_data_over">데이터 전송 완료</string>
+    <string name="start_scan">검색 시작</string>
+    <string name="scan_device_failed">검색 실패</string>
+    <string name="user_agreement">개인정보 보호정책  </string>
+    <string name="privacy_policy">  개인정보 보호정책</string>
+    <string name="privacy_dialog_content">Thank you for choosing us! We take your personal information and privacy protection very seriously.
+In order to better protect your personal rights and interests, please carefully read all terms in the %s and %s before using our products.
+In particular :1. Our rules and provisions on the collection/storage/use/external provision/protection of your personal information, and your user rights and other provisions;
+2. Agree on our limited liability and exemption clauses; 3. Other important terms marked in color or bold. By clicking "Agree and continue", you mean that you have read and agree to the above agreement.
+By clicking "Agree and continue", you mean that you have read and agree to the above agreement.</string>
+
+    <string name="privacy_policy_tag">《Privacy Policy》</string>
+    <string name="user_agreement_tag">《User Agreement》</string>
+    <string name="privacy_policy_and_user_agreement">Privacy Policy &amp; User Agreement </string>
+    <string name="reject">Reject</string>
+    <string name="agree">Agree</string>
+</resources>

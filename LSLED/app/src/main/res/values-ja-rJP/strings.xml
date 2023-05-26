@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">LEDBadge</string>
+    <string name="title_sendList">送信リスト</string>
+    <string name="settings">設置</string>
+    <string name="edit">編集</string>
+    <string name="about">について</string>
+    <string name="return_back">戻る</string>
+    <string name="delete_pic">画像を削除</string>
+    <string name="edit_pic">画像を編集する</string>
+    <string name="pick_pic">画像を選択</string>
+    <string name="origin_pic">[原図]</string>
+    <string name="gray_pic">[白黒]</string>
+    <string name="reset_btn">リセット</string>
+    <string name="scroll_btn">転がる</string>
+    <string name="draw_btn">手 絵</string>
+    <string name="reverse_btn">反 色</string>
+    <string name="same_model_exist">同じ絵がある</string>
+    <string name="save_Succeed">保存に成功する</string>
+    <string name="no_data">データがない</string>
+    <string name="cancel">キャンセル</string>
+    <string name="send_content">送信内容</string>
+    <array name="speedStr">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>7</item>
+        <item>8</item>
+    </array>
+    <array name="modestr">
+        <item>左に移す</item>
+        <item>右に移す</item>
+        <item>上に移す</item>
+        <item>下に移す</item>
+        <item>固定</item>
+        <item>アニメーション</item>
+        <item>スノーフレーク</item>
+        <item>ピクチャ</item>
+        <item>レーザー</item>
+    </array>
+    <string name="title_dianzheng">セット格子</string>
+    <string name="msg_dianzheng">セット格子</string>
+    <string name="sure">確定</string>
+    <string name="exit">名目</string>
+
+    <string name="cannot_send_empty">空には送信できない</string>
+    <string name="save_msg_success">保存情報の成功を保存する</string>
+    <string name="save_msg_fail">情報を保存して失敗する</string>
+    <string name="data_load_fail">データ負荷失敗</string>
+    <string name="not_get_data">データが得られない</string>
+    <string name="cannt_open_db">データベースを開けられない</string>
+    <string name="save_success">成功を保存する</string>
+    <string name="save_fail">失败を保存する</string>
+    <string name="send_over">送信済み</string>
+    <string name="connect_success">成功につながって</string>
+
+    <string name="diangzheng11">11格子</string>
+    <string name="diangzheng12">12格子</string>
+    <string name="diangzheng16">16格子</string>
+    <string name="chooise">選択</string>
+    <string name="daozi">論点字</string>
+    <string name="msg">情報</string>
+    <string name="speed">速度</string>
+    <string name="mode">モード</string>
+    <string name="flash">が</string>
+    <string name="marquee">跑马灯</string>
+    <string name="save">保存</string>
+    <string name="send">発送</string>
+    <string name="pix">格子</string>
+    <string name="colors">颜色</string>
+
+    <string name="no_device_found">デバイスが見つかりません</string>
+    <string name="open_ble">Bluetoothを開くことを許可してください</string>
+    <string name="open_coarse_location">マニュアルを手動で開いてください</string>
+    <string name="not_scan_device">デバイスを検索していません</string>
+    <string name="connecting">接続中</string>
+    <string name="searching">検索中</string>
+    <string name="send_timeout">データを送信する</string>
+    <string name="send_failed">データを送信している</string>
+    <string name="sending_data">データを送信している</string>
+    <string name="send_data_over">データ送信完了</string>
+    <string name="start_scan">検索を開始</string>
+    <string name="scan_device_failed">検索失敗</string>
+    <string name="user_agreement">ユーザープロトコル&#160;&#160;</string>
+    <string name="privacy_policy">&#160;&#160;プライバシーポリシー</string>
+    <string name="privacy_dialog_content">Thank you for choosing us! We take your personal information and privacy protection very seriously.
+In order to better protect your personal rights and interests, please carefully read all terms in the %s and %s before using our products.
+In particular :1. Our rules and provisions on the collection/storage/use/external provision/protection of your personal information, and your user rights and other provisions;
+2. Agree on our limited liability and exemption clauses; 3. Other important terms marked in color or bold. By clicking "Agree and continue", you mean that you have read and agree to the above agreement.
+By clicking "Agree and continue", you mean that you have read and agree to the above agreement.</string>
+
+    <string name="privacy_policy_tag">《Privacy Policy》</string>
+    <string name="user_agreement_tag">《User Agreement》</string>
+    <string name="privacy_policy_and_user_agreement">Privacy Policy &amp; User Agreement </string>
+    <string name="reject">Reject</string>
+    <string name="agree">Agree</string>
+</resources>

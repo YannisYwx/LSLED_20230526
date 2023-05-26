@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="textColor" format="color" />
+    <attr name="lineColor" format="color" />
+    <attr name="labelColor" format="color" />
+    <attr name="label" format="string" />
+    <attr name="hasBottomLine" format="boolean" />
+    <attr name="hasTopLine" format="boolean" />
+    <attr name="viewIcon" format="reference" />
+    <attr name="arrow" format="reference" />
+    <attr name="value" format="string" />
+    <attr name="valueColor" format="color" />
+
+
+
+
+
+    <declare-styleable name="ItemView">
+        <attr name="hasBottomLine" />
+        <attr name="hasTopLine" />
+        <attr name="lineColor" />
+        <attr name="labelColor" />
+        <attr name="valueColor"/>
+        <attr name="label" />
+        <attr name="value"/>
+    </declare-styleable>
+
+
+    <declare-styleable name="WheelView">
+        <attr name="normalTextColor" format="color" />
+        <attr name="normalTextSize" format="dimension" />
+        <attr name="selectedTextColor" format="color" />
+        <attr name="selectedTextSize" format="dimension" />
+        <attr name="unitHeight" format="dimension" />
+        <attr name="itemNumber" format="integer" />
+        <attr name="lineColor" />
+        <attr name="lineHeight" format="dimension" />
+        <attr name="maskHeight" format="dimension" />
+        <attr name="noEmpty" format="boolean" />
+        <attr name="isEnable" format="boolean" />
+    </declare-styleable>
+    <!--圆形头像-->
+    <declare-styleable name="CircleImageView">
+        <attr name="border_width" format="dimension" />
+        <attr name="border_color" format="color" />
+    </declare-styleable>
+</resources>

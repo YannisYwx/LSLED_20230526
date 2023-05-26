@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+    <!--自定义状态栏 高度-->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:visibility="gone"
+        android:background="@android:color/white" />
+
+    <include layout="@layout/layout_toolbar" />
+
+    <LinearLayout
+        android:id="@+id/rl_pics"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <LinearLayout
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="【原图】" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="【黑白】" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="【真实图】" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/tv_v"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/iv_pic"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/btn_bg" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/iv_wb"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/btn_bg" />
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <com.yannis.ledcard.widget.LEDView
+                    android:id="@+id/iv_ble"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_centerInParent="true" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:padding="5dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="调节黑白阈值:" />
+        <SeekBar
+            android:id="@+id/sb"
+            android:layout_width="255dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_gravity="center_vertical"
+            android:max="100" />
+        <TextView
+            android:id="@+id/tv_tmp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="255" />
+    </LinearLayout>
+
+
+
+    <com.yannis.ledcard.widget.ItemView
+        android:id="@+id/item_speed"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:hasBottomLine="true"
+        app:label="@string/speed"
+        app:value="5"
+        app:labelColor="@android:color/black"
+        app:valueColor="@android:color/black"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        />
+    <com.yannis.ledcard.widget.ItemView
+        android:id="@+id/item_mode"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:hasBottomLine="true"
+        app:label="@string/mode"
+        app:value="激光"
+        app:labelColor="@android:color/black"
+        app:valueColor="@android:color/black"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        >
+        <com.yannis.ledcard.widget.ItemView
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            app:hasBottomLine="true"
+            app:label="@string/flash"
+            app:labelColor="@android:color/black"
+            />
+        <CheckBox
+            android:id="@+id/cb_flash"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:button="@null"
+            android:background="@drawable/cb_bg"
+            android:layout_centerVertical="true"
+            android:checked="false"
+            android:focusable="false"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="20dp"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        >
+        <com.yannis.ledcard.widget.ItemView
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            app:hasBottomLine="true"
+            app:label="@string/marquee"
+            app:labelColor="@android:color/black"
+            />
+        <CheckBox
+            android:id="@+id/cb_marquee"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:button="@null"
+            android:background="@drawable/cb_bg"
+            android:layout_centerVertical="true"
+            android:checked="false"
+            android:focusable="false"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="20dp"/>
+    </RelativeLayout>
+    <Button
+        android:id="@+id/btn_send"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_bg"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="@string/send"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:textStyle="normal" />
+</LinearLayout>

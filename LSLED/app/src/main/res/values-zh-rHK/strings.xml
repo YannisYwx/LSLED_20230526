@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">LEDBadge</string>
+    <string name="title_sendList">发送列表</string>
+    <string name="settings">设置</string>
+    <string name="edit">编辑</string>
+    <string name="about">關於</string>
+    <string name="return_back">返回</string>
+    <string name="delete_pic">刪除圖片</string>
+    <string name="edit_pic">編輯圖片</string>
+    <string name="pick_pic">選擇圖片</string>
+    <string name="origin_pic">[原圖]</string>
+    <string name="gray_pic">[黑白]</string>
+    <string name="reset_btn">重 置</string>
+    <string name="scroll_btn">滾 動</string>
+    <string name="draw_btn">手 繪</string>
+    <string name="reverse_btn">反 色</string>
+    <string name="same_model_exist">已存在相同圖片</string>
+    <string name="save_Succeed">保存成功</string>
+    <string name="no_data">沒有數據</string>
+    <string name="cancel">取消</string>
+    <string name="send_content">發送內容</string>
+
+    <array name="speedStr">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>7</item>
+        <item>8</item>
+    </array>
+    <array name="modestr">
+        <item>左移</item>
+        <item>右移</item>
+        <item>上移</item>
+        <item>下移</item>
+        <item>固定</item>
+        <item>動畫</item>
+        <item>雪花</item>
+        <item>畫卷</item>
+        <item>雷射</item>
+    </array>
+    <string name="title_dianzheng">設定點陣</string>
+    <string name="msg_dianzheng">設定點陣</string>
+    <string name="sure">是</string>
+    <string name="exit">退出</string>
+    <string name="cannot_send_empty">不能發送空消息</string>
+    <string name="save_msg_success">保存資訊成功</string>
+    <string name="save_msg_fail">保存資訊失敗</string>
+    <string name="data_load_fail">數據加載失敗</string>
+    <string name="not_get_data">沒有得到數據遊標</string>
+    <string name="cannt_open_db">無法打開資料庫</string>
+    <string name="save_success">保存成功</string>
+    <string name="save_fail">保存失敗</string>
+    <string name="send_over">發送完畢</string>
+    <string name="connect_success">連接成功</string>
+
+    <string name="diangzheng11">11點陣</string>
+    <string name="diangzheng12">12點陣</string>
+    <string name="diangzheng16">16點陣</string>
+    <string name="chooise">選擇</string>
+    <string name="daozi">倒字</string>
+    <string name="msg">資訊</string>
+    <string name="speed">速度</string>
+    <string name="mode">模式</string>
+    <string name="flash">閃爍</string>
+    <string name="marquee">跑馬燈</string>
+    <string name="save">保存</string>
+    <string name="send">發送</string>
+    <string name="pix">點陣</string>
+    <string name="colors">颜色</string>
+
+    <string name="no_device_found">沒有搜索到設備</string>
+    <string name="open_ble">請允許打開藍牙</string>
+    <string name="open_coarse_location">請手動開啟定位許可權</string>
+    <string name="not_scan_device">未能蒐索到設備</string>
+    <string name="connecting">連接設備中</string>
+    <string name="searching">正在蒐索</string>
+    <string name="send_timeout">發送超時</string>
+    <string name="send_failed">發送失敗</string>
+    <string name="sending_data">正在發送數據</string>
+    <string name="send_data_over">數據發送完成</string>
+    <string name="start_scan">開始蒐索</string>
+    <string name="scan_device_failed">搜索失败</string>
+    <string name="user_agreement">用戶協議&#160;&#160;</string>
+    <string name="privacy_policy">&#160;&#160;隱私政策</string>
+    <string name="privacy_dialog_content">感謝您選擇我們!我們非常重視您的個人信息和隱私保護。
+    為了更好地保障您的個人權益，在您使用我們的產品前，請務必審慎閱讀%s和%s內的所有條款，
+尤其是:1.我們對您的個人信息的收集/保存/使用/對外提供/保護等規則條款，以及您的用戶權利等條款;
+    2. 約定我們的限製責任、免責條款; 3.其他以顏色或加粗進行標識的重要條款。您點擊"同意並繼續」的行為即表示您已閱讀完畢並同意以上協議的全部內容。
+您點擊"同意並繼續」的行為即表示您已閱讀完畢並同意以上協議的全部內容</string>
+    <string name="privacy_policy_tag">《隱私政策》</string>
+    <string name="user_agreement_tag">《用戶協議》</string>
+    <string name="privacy_policy_and_user_agreement">用戶協議與隱私政策</string>
+    <string name="reject">拒絕</string>
+    <string name="agree">同意並繼續</string>
+</resources>

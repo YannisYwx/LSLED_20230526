@@ -1,0 +1,23 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+    <!-- dialog 主题 -->
+    <style name="YDialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item><!-- Dialog的windowFrame框为无 -->
+        <item name="android:windowIsFloating">true</item><!-- 是否浮现在activity之上 -->
+        <item name="android:windowIsTranslucent">false</item><!-- 是否透明（半透明） -->
+        <item name="android:windowNoTitle">true</item><!--是否无标题  -->
+        <item name="android:windowBackground">@android:color/transparent</item><!-- 设置dialog的背景  -->
+        <item name="android:backgroundDimEnabled">true</item><!-- 背景是否模糊显示 -->
+    </style>
+    <style name="dialogAnim" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/dialog_enter</item>  //进入时的动画
+        <item name="android:windowExitAnimation">@anim/dialog_exit</item>    //退出时的动画
+    </style>
+</resources>

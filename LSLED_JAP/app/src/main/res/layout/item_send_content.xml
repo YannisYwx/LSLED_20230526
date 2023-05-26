@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:layout_gravity="center_vertical"
+    android:padding="10dp"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:descendantFocusability="blocksDescendants"
+    >
+
+    <TextView
+        android:id="@+id/tv_index"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true"
+        android:text="1."
+        android:textSize="18sp"
+        android:singleLine="true"
+        android:textColor="@android:color/black"/>
+    <TextView
+        android:id="@+id/tv_context"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:text="优惠大酬宾"
+        android:textSize="18sp"
+        android:textColor="@android:color/black"
+        android:layout_toEndOf="@+id/tv_index" />
+    <CheckBox
+        android:id="@+id/cb_isSelect"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:button="@null"
+        android:background="@drawable/cb_bg"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:checked="false"
+        android:focusable="false" />
+</RelativeLayout>

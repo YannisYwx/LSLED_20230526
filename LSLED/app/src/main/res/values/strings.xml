@@ -1,0 +1,102 @@
+<resources>
+    <string name="app_name">LEDBadge</string>
+
+    <string name="title_sendList">SEND LIST</string>
+    <string name="settings">SETTINGS</string>
+    <string name="edit">EDIT</string>
+    <string name="about">ABOUT</string>
+    <string name="return_back">Return</string>
+    <string name="delete_pic">DELETE PIC</string>
+    <string name="edit_pic">EDIT PIC</string>
+    <string name="pick_pic">PICK PIC</string>
+    <string name="origin_pic">[ORIGIN]</string>
+    <string name="gray_pic">[B. W.]</string>
+    <string name="reset_btn">RESET</string>
+    <string name="scroll_btn">SCROLL</string>
+    <string name="draw_btn">DRAW</string>
+    <string name="reverse_btn">REVERSE</string>
+    <string name="same_model_exist">SAME MODEL EXIST</string>
+    <string name="save_Succeed">SUCCESSFUl</string>
+    <string name="no_data">NO DATA</string>
+    <string name="cancel">Cancel</string>
+    <string name="send_content">SEND CONTENT</string>
+
+    <array name="speedStr">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>7</item>
+        <item>8</item>
+    </array>
+    <array name="modestr">
+        <item>left</item>
+        <item>right</item>
+        <item>up</item>
+        <item>down</item>
+        <item>fixed</item>
+        <item>animation</item>
+        <item>snowflake</item>
+        <item>picture</item>
+        <item>laser</item>
+    </array>
+    <string name="title_dianzheng">set port</string>
+    <string name="msg_dianzheng">set port</string>
+    <string name="sure">yes</string>
+    <string name="exit">exit</string>
+
+    <string name="cannot_send_empty">Do not send empty message</string>
+    <string name="save_msg_success">Save message successful</string>
+    <string name="save_msg_fail">Save message failed</string>
+    <string name="data_load_fail">Load data failure</string>
+    <string name="not_get_data">Do not get data cursor</string>
+    <string name="cannt_open_db">Can not open the database</string>
+    <string name="save_success">Save successful</string>
+    <string name="save_fail">Save failed</string>
+    <string name="send_over">Send successful</string>
+    <string name="connect_success">Connect successful</string>
+
+    <string name="diangzheng11">11 dot matrix</string>
+    <string name="diangzheng12">12 dot matrix</string>
+    <string name="diangzheng16">16 dot matrix</string>
+    <string name="chooise">choose</string>
+    <string name="daozi">Reverse</string>
+    <string name="msg">Message</string>
+    <string name="speed">Speed</string>
+    <string name="mode">Mode</string>
+    <string name="flash">Flash</string>
+    <string name="marquee">Marquee</string>
+    <string name="save">Save</string>
+    <string name="send">Send</string>
+    <string name="pix">Matrix</string>
+    <string name="colors">Color</string>
+
+    <string name="no_device_found">No device found</string>
+    <string name="open_ble">Please allow to open Bluetooth</string>
+    <string name="open_coarse_location">Please open the positioning permissions manually</string>
+    <string name="not_scan_device">Failed to search device</string>
+    <string name="connecting">Connecting device</string>
+    <string name="searching">Searching</string>
+    <string name="send_timeout">Send data timeout</string>
+    <string name="send_failed">Send data failed</string>
+    <string name="sending_data">Sending data</string>
+    <string name="send_data_over">Sending data to complete</string>
+    <string name="start_scan">Start scan device</string>
+    <string name="scan_device_failed">Failed to search device.</string>
+    <string name="user_agreement">user agreement&#160;&#160;</string>
+    <string name="privacy_policy">&#160;&#160;privacy policy</string>
+    <string name="privacy_dialog_content">Thank you for choosing us! We take your personal information and privacy protection very seriously.
+In order to better protect your personal rights and interests, please carefully read all terms in the %s and %s before using our products.
+In particular :1. Our rules and provisions on the collection/storage/use/external provision/protection of your personal information, and your user rights and other provisions;
+2. Agree on our limited liability and exemption clauses; 3. Other important terms marked in color or bold. By clicking "Agree and continue", you mean that you have read and agree to the above agreement.
+By clicking "Agree and continue", you mean that you have read and agree to the above agreement.</string>
+
+    <string name="privacy_policy_tag">《Privacy Policy》</string>
+    <string name="user_agreement_tag">《User Agreement》</string>
+    <string name="privacy_policy_and_user_agreement">Privacy Policy &amp; User Agreement </string>
+    <string name="reject">Reject</string>
+    <string name="agree">Agree</string>
+</resources>

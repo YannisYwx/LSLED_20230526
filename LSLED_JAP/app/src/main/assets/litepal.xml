@@ -1,0 +1,11 @@
+<?xml version="3.1" encoding="utf-8"?>
+<litepal>
+    <dbname value="LSLED"/>
+
+    <version value="6"/>
+
+    <list>
+        <mapping class="com.yannis.ledcard.bean.SendContent"/>
+        <mapping class="com.yannis.ledcard.bean.LEDBmp"/>
+    </list>
+</litepal>

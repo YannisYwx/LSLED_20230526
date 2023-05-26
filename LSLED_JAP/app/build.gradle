@@ -1,0 +1,98 @@
+apply plugin: 'com.android.application'
+
+def releaseTime() {
+    return new Date().format("yyyyMMdd", TimeZone.getTimeZone("UTC"))
+}
+
+android {
+    compileSdkVersion 33
+    defaultConfig {
+        applicationId "com.yannis.flexsign"
+        minSdkVersion 18
+        targetSdkVersion 33
+        versionCode 6
+        versionName "1.0.6"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        release {
+            keyAlias 'theochendev'
+            keyPassword '159753'
+            storeFile file('D:\\DemoCode\\android\\LSLED_JAP\\theochen.jks')
+            storePassword '159753'
+        }
+    }
+
+    buildTypes {
+        release {
+
+            // 混淆
+            minifyEnabled false
+
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+//            applicationVariants.all { variant ->
+//                variant.outputs.all { output ->
+//                    def outputFile = output.outputFile
+//                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
+//
+//                        // apk_-版本号-版本名称-编译时间.apk
+//                        def fileName = "LSLED-${defaultConfig.versionCode}-${defaultConfig.versionName}-${releaseTime()}.apk"
+//                        outputFileName = fileName
+//                    }
+//                }
+//
+//            }
+        }
+    }
+    //Add the following configuration
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+    productFlavors {
+    }
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
+    packagingOptions {
+        exclude 'META-INF/atomicfu.kotlin_module'
+        exclude 'META-INF/metadata.kotlin_module'
+        exclude 'META-INF/metadata.jvm.kotlin_module'
+    }
+}
+
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        def requested = details.requested
+        if (requested.group == 'com.android.support') {
+            if (!requested.name.startsWith("multidex")) {
+                details.useVersion '26.0.1'
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    testImplementation 'junit:junit:4.12'
+    /*数据库*/
+    api 'org.litepal.android:core:1.5.0'
+    /*依赖注入*/
+    implementation 'com.jakewharton:butterknife:10.2.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.1'
+    api 'com.google.code.gson:gson:2.8.6'
+    api 'com.github.bumptech.glide:glide:3.7.0'
+    api 'com.lzy.widget:imagepicker:0.6.1'
+    implementation "com.github.permissions-dispatcher:permissionsdispatcher:4.8.0"
+    annotationProcessor "com.github.permissions-dispatcher:permissionsdispatcher-processor:4.8.0"
+    implementation "cat.ereza:customactivityoncrash:2.2.0"
+
+    implementation 'no.nordicsemi.android.support.v18:scanner:1.4.2'
+    implementation 'com.github.getActivity:ToastUtils:10.5'
+}

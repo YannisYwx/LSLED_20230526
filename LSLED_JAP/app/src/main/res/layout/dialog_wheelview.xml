@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:text="@string/cancel"
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:text="@string/sure"
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:src="@null"
+        android:textColor="@android:color/black" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp">
+
+        <com.yannis.ledcard.widget.WheelView
+            android:id="@+id/wheelView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:visibility="visible"
+            android:layout_centerInParent="true"
+            app:isEnable="true"
+            app:itemNumber="7"
+            app:lineColor="#666666"
+            app:lineHeight="0.85dp"
+            app:maskHeight="100dp"
+            app:noEmpty="true"
+            app:normalTextColor="#9A9A9A"
+            app:normalTextSize="16sp"
+            app:paddingEnd="10dp"
+            app:paddingStart="10dp"
+            app:selectedTextColor="@android:color/black"
+            app:selectedTextSize="22sp"
+            app:unitHeight="32dp" />
+
+        <TextView
+            android:id="@+id/wheelView_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="20dp"
+            android:gravity="center_vertical"
+            android:text="year"
+            android:textSize="18sp"
+            android:visibility="visible" />
+
+    </RelativeLayout>
+
+</LinearLayout>
