@@ -16,22 +16,17 @@ import android.util.TypedValue;
  * $desc$
  *
  * @author yannis
- *         Created on 2016/3/25 10:54
- *         Email:923080261@qq.com
+ * Created on 2016/3/25 10:54
+ * Email:923080261@qq.com
  */
 public class ViewUtils {
 
 
     /**
-     *
-     * @param colorA
-     *            the startColor
-     * @param colorB
-     *            the endColor
-     * @param degree
-     *            the count of color what you want between startColor & endColor
-     * @param progress
-     *            the index in degree
+     * @param colorA   the startColor
+     * @param colorB   the endColor
+     * @param degree   the count of color what you want between startColor & endColor
+     * @param progress the index in degree
      * @return
      */
     public static int getColorBetweenAB(int colorA, int colorB, float degree, int progress) {

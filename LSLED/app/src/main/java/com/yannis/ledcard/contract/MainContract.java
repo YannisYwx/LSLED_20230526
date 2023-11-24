@@ -61,5 +61,7 @@ public interface MainContract {
         void unregisterReceiver();
 
         void startScanDevice();
+
+        void testParseData(List<SendContent> sendContentList, int matrix);
     }
 }

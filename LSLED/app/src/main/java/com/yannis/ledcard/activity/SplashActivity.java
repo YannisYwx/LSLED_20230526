@@ -57,7 +57,8 @@ public class SplashActivity extends BaseActivity {
                 sendContent.setSpeed(4);
                 if (i == 0) {
                     sendContent.setMessage("Welcome");
-//                    sendContent.setMessage("温馨提示:请所有贵宾朋友请爱护本酒店财物，设施设备（打碟机、音响、话筒、显示屏等），尤其碟机昂贵，望各位贵宾勿近（酒水切勿进机），如有损坏须照价赔偿；");
+//                    sendContent.setMessage("Chào mừng bạn đến với123");
+                    sendContent.setMessage("àừạđếớ-ABCDEFGHIJKLMNOPQRSTUVWXYZ-123567890-abcdefghijklmnopqrstuvwxyz-恭喜发财");
                     sendContent.setSelect(true);
                 }
                 sendContentList.add(sendContent);

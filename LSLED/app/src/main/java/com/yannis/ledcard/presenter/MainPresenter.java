@@ -190,6 +190,11 @@ public class MainPresenter extends BasePresenter<MainContract.View, MainContract
         bleScanner.startScanBluetoothDevice();
     }
 
+    @Override
+    public void testParseData(List<SendContent> sendContentList, int matrix) {
+        mode.getSendLedData(sendContentList, matrix);
+    }
+
     /**
      * 初始化ble搜索
      */

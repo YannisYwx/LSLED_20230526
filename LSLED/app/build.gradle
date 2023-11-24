@@ -10,8 +10,8 @@ android {
         applicationId "com.yannis.ledcard"
         minSdkVersion 18
         targetSdkVersion 33
-        versionCode 40//发布新版本修改这里wangdelin leshan,lesun.jks
-        versionName "3.4.2"
+        versionCode 41//发布新版本修改这里wangdelin leshan,lesun.jks
+        versionName "3.4.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

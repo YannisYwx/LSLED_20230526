@@ -4,11 +4,19 @@ import static com.yannis.ledcard.activity.MainActivity.SDF;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.os.Environment;
+import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -19,6 +27,8 @@ import com.yannis.ledcard.bean.SendContent;
 import com.yannis.ledcard.mode.MainMode;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,6 +40,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -42,8 +53,8 @@ public class LedDataUtil {
     private static final String TAG = "LedDataUtil";
     private static SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
 
-    private static final String sdCardDirPath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator;// SD卡的根目录地址
-    private static final String APP_DIR = "LED_IMG" + File.separator;
+    private static final String IMG_DIR = LedBleApplication.instance.getExternalFilesDir(null) + File.separator + "LED_IMG" + File.separator;
+    //    private static final String APP_DIR = "LED_IMG" + File.separator;
     public static String ENCODE = "EUC_KR";
     //    public static String ZK_PATH_ch = "HZK12";
 //    public static String ZK_PATH_en = "ASC12";
@@ -350,9 +361,13 @@ public class LedDataUtil {
     private static int getMsgBitmapPixLength(String msg, int matrix) {
         Paint paint = new Paint();
         paint.setTextSize(matrix);
+        Typeface typeface = Typeface.createFromAsset(LedBleApplication.instance.getAssets(), "fonts/typeface1456.ttf");
+        paint.setTypeface(typeface);
         paint.setStrokeWidth(1);
         paint.setTextAlign(Paint.Align.CENTER);
-        return (int) ViewUtils.getTextRectWidth(paint, msg);
+        int msgBitmapPixLength = (int) ViewUtils.getTextRectWidth(paint, msg);
+        Log.e(TAG, "======获取单条发送信息的长度(点阵图的像素长度)=======> msg = " + msg + " , 长度 = " + msgBitmapPixLength);
+        return msgBitmapPixLength;
     }
 
     private static int getMsgBitmapByteLength(String msg, int matrix) {
@@ -718,7 +733,7 @@ public class LedDataUtil {
      * @param sendContentList
      */
     public static byte[][] getMsgBytes1(Context context, int matrix, List<SendContent> sendContentList) {
-        int msgLength = getTotalMessageLength(matrix, sendContentList);
+        int msgLength = getTotalMessageLength(matrix, sendContentList);//有问题
         Log.e(TAG, "getMsgBytes ------------ msgLength = " + msgLength + " matrix = " + matrix);
         //byte length
         int countLength = 0;
@@ -736,6 +751,8 @@ public class LedDataUtil {
                 Log.e("读取字库数据", "------------------------------*** 时间 = " + SDF.format(new Date()));
                 tempArray = getMessageByteArray(context, message, matrix);
                 Log.e("读取字库数据", "------------------------------*** 时间 = " + SDF.format(new Date()));
+                Log.e("读取字库数据", "------------------------------*** tempMsgLength = " + tempMsgLength);
+                Log.e("读取字库数据", "------------------------------*** tempArray.length = " + tempArray.length);
 
 
                 for (int j = 0; j < tempMsgLength; j++) {
@@ -775,15 +792,14 @@ public class LedDataUtil {
                 tempMsgLength = getSingleMsgByteLength(message, matrix);
                 boolean isUserFontLib = LangUtils.isUserFontLib(message);
                 Log.e(TAG, "message = " + message + (isUserFontLib ? "数据来自字库" : "数据来自点阵图"));
-
                 if (isUserFontLib) {
                     //从字库获取
                     tempArray = getLibMsgBytes(context, matrix, message);
                 } else {
                     //绘制点阵图
                     Bitmap bitmap = drawBitmap(message, matrix);
-                    String name = "LedImg_" + sdf.format(new Date());
-                    saveBmp(bitmap, name);
+//                    String name = "LedImg_" + sdf.format(new Date());
+//                    saveBmp(bitmap, name);
                     //获取点阵图数据
                     tempArray = bitmapToByteArray(bitmap);
                 }
@@ -798,6 +814,24 @@ public class LedDataUtil {
         return msgByteArray;
     }
 
+    public static Bitmap drawBitmap_FONT(String text, int matrix) {
+        Paint paint = new Paint();
+        paint.setTextSize(matrix);
+        paint.setStrokeWidth(1f);
+        paint.setTextAlign(Paint.Align.CENTER);
+        Typeface typeface = Typeface.createFromAsset(LedBleApplication.instance.getAssets(), "fonts/simsun.ttc");
+        paint.setTypeface(typeface);
+        int width = (int) ViewUtils.getTextRectWidth(paint, text);
+        Bitmap bitmap = Bitmap.createBitmap(width, matrix, Bitmap.Config.RGB_565);
+        Canvas canvas = new Canvas(bitmap);
+        paint.setColor(Color.WHITE);
+        canvas.drawRect(new RectF(0, 0, width, matrix), paint);
+        paint.setColor(Color.BLACK);
+        paint.setAntiAlias(true);
+        canvas.drawText(text, width / 2.0f, ViewUtils.correctTextY(matrix / 2.0f, paint), paint);
+        return bitmap;
+    }
+
     /**
      * drawBimap
      *
@@ -805,19 +839,126 @@ public class LedDataUtil {
      * @param matrix
      * @return
      */
-    public static Bitmap drawBitmap(String text, int matrix) {
+    public static Bitmap drawBitmap_ta(String text, int matrix) {
         Paint paint = new Paint();
-        paint.setTextSize(matrix);
-        paint.setStrokeWidth(1);
+        paint.setTextSize(matrix * 0.95F);
         paint.setTextAlign(Paint.Align.CENTER);
+        paint.setAntiAlias(false);
+        Typeface typeface = Typeface.createFromAsset(LedBleApplication.instance.getAssets(), "fonts/tahoma.ttf");
+//        Typeface typeface = Typeface.createFromAsset(LedBleApplication.instance.getAssets(), "fonts/ARIAL.TTF");
+        paint.setTypeface(typeface);
         int width = (int) ViewUtils.getTextRectWidth(paint, text);
-        Bitmap bitmap = Bitmap.createBitmap(width, matrix, Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(width, matrix, Bitmap.Config.RGB_565);
         Canvas canvas = new Canvas(bitmap);
         paint.setColor(Color.WHITE);
         canvas.drawRect(new RectF(0, 0, width, matrix), paint);
         paint.setColor(Color.BLACK);
-        canvas.drawText(text, width / 2.0f, ViewUtils.correctTextY(matrix / 2.0f, paint), paint);
+        canvas.drawText(text, width / 2.0f, ViewUtils.correctTextY(matrix / 2.0f, paint) - 1, paint);
         return bitmap;
+    }
+
+    public static Bitmap drawBitmap(String text, int matrix) {
+        Paint paint = new Paint();
+        paint.setTextSize(matrix * 1f);
+        paint.setTextAlign(Paint.Align.CENTER);
+        paint.setAntiAlias(false);
+        Typeface typeface = Typeface.createFromAsset(LedBleApplication.instance.getAssets(), "fonts/typeface1456.ttf");
+//        Typeface typeface = Typeface.createFromAsset(LedBleApplication.instance.getAssets(), "fonts/tahoma.ttf");
+//        Typeface typeface = Typeface.createFromAsset(LedBleApplication.instance.getAssets(), "fonts/ARIAL.TTF");
+//        Typeface typeface = Typeface.createFromAsset(LedBleApplication.instance.getAssets(), "fonts/12.TTF");
+//        Typeface typeface = Typeface.createFromAsset(LedBleApplication.instance.getAssets(), "fonts/simsun.ttc");
+        paint.setTypeface(typeface);
+        int width = (int) ViewUtils.getTextRectWidth(paint, text);
+        Bitmap bitmap = Bitmap.createBitmap(width, matrix, Bitmap.Config.RGB_565);
+        Canvas canvas = new Canvas(bitmap);
+        paint.setColor(Color.WHITE);
+        canvas.drawRect(new RectF(0, 0, width, matrix), paint);
+        paint.setColor(Color.BLACK);
+        canvas.drawText(text, width / 2.0f, ViewUtils.correctTextY(matrix / 2.0f, paint) /*- 1*/, paint);
+        return bitmap;
+    }
+
+    public static Bitmap toBlackAndWhite(Bitmap bitmap) {
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        int[] pixels = new int[width * height];
+        bitmap.getPixels(pixels, 0, width, 0, 0, width, height);
+
+        int threshold = 140; // 阈值
+        for (int i = 0; i < pixels.length; i++) {
+            int pixel = pixels[i];
+            int r = (pixel >> 16) & 0xff;
+            int g = (pixel >> 8) & 0xff;
+            int b = pixel & 0xff;
+
+            // 计算灰度值
+            int gray = (int) (0.2989 * r + 0.5870 * g + 0.1140 * b);
+
+            // 将像素设置为黑色或白色
+            pixel = (gray > threshold) ? Color.WHITE : Color.BLACK;
+            pixels[i] = pixel;
+        }
+
+        return Bitmap.createBitmap(pixels, 0, width, width, height, Bitmap.Config.ARGB_8888);
+    }
+
+
+    /**
+     * drawBimap
+     *
+     * @param text
+     * @param matrix
+     * @return
+     */
+    public static Bitmap drawBitmap_(String text, int matrix) {
+        Log.e("点阵图", " text = " + text + " 点阵 = " + matrix);
+        Paint paint = new Paint();
+        int scaleSize = 100;
+        int realHeight = matrix;
+        int realWidth = 0;
+        paint.setTextSize(matrix);
+        paint.setStrokeWidth(0.1f);
+        paint.setAntiAlias(false);
+        paint.setTextAlign(Paint.Align.CENTER);
+        realWidth = (int) ViewUtils.getTextRectWidth(paint, text);
+
+//-----------------------------------------------------------
+        matrix = (int) (matrix * scaleSize);
+        paint.setTextSize(matrix);
+        paint.setStrokeWidth(1f);
+        paint.setTextAlign(Paint.Align.CENTER);
+        int width = (int) ViewUtils.getTextRectWidth(paint, text);
+//-----------------------------------------------------------
+        //这个表现可以
+//        Typeface /*typeface = Typeface.createFromAsset(LedBleApplication.instance.getAssets(), "fonts/tahoma.ttf");
+//        paint.setTypeface(typeface);
+//
+//        typeface = Typeface.createFromAsset(LedBleApplication.instance.getAssets(), "fonts/simsun.ttc");//新宋体-内容识别有误
+//        paint.setTypeface(typeface);*/
+//
+//                typeface = Typeface.createFromAsset(LedBleApplication.instance.getAssets(), "fonts/tahoma.ttf");//新宋体-内容识别有误
+//        paint.setTypeface(typeface);
+//-----------------------------------------------------------
+        Bitmap bitmap = Bitmap.createBitmap(width, matrix, Bitmap.Config.RGB_565);
+        Canvas canvas = new Canvas(bitmap);
+        canvas.drawColor(Color.WHITE);
+        paint.setColor(Color.WHITE);
+        canvas.drawRect(new RectF(0, 0, width, matrix), paint);
+        paint.setColor(Color.BLACK);
+        canvas.drawText(text, width / 2.0f, ViewUtils.correctTextY(matrix / 2.0f, paint), paint);
+//        return bitmap;
+        return getScaleBitmap(bitmap, realWidth, realHeight);
+    }
+
+    public static Bitmap getScaleBitmap(Bitmap bitmap, int width, int height) {
+        int originalWidth = bitmap.getWidth();
+        int originalHeight = bitmap.getHeight();
+        Bitmap newBitmap = Bitmap.createBitmap(width, height, bitmap.getConfig());
+        Canvas canvas = new Canvas(newBitmap);
+        Rect src = new Rect(0, 0, originalWidth, originalHeight);
+        Rect dst = new Rect(0, 0, width, height);
+        canvas.drawBitmap(bitmap, src, dst, null);
+        return newBitmap;
     }
 
     /**
@@ -854,16 +995,11 @@ public class LedDataUtil {
                 sb.append(appendStr);
             }
         }
-//        String imgStr = sb.toString();
-//        int imgStrLength = imgStr.length();
-//        Log.e(TAG, "imgStrLength = " + imgStrLength + "\n imgStr = " + imgStr);
-//        Log.e(TAG, "sbLength = " + sb.length() + "\n sb = " + sb.toString());
-//        int byteLength = imgStrLength / 8;
-//        String[] strArray = new String[byteLength];
-//        for (int i = 0; i < byteLength; i++) {
-//            strArray[i] = imgStr.substring(i * 8, i * 8 + 8);
-//        }
-        return DataUtils.binaryString2ByteArray(sb.toString());
+        String imgStr = sb.toString();
+        int imgStrLength = imgStr.length();
+        Log.e(TAG, "imgStrLength = " + imgStrLength + "\n imgStr = " + imgStr);
+        Log.e(TAG, "sbLength = " + sb.length() + "\n sb = " + sb.toString());
+        return DataUtils.binaryString2ByteArray(imgStr);
     }
 
     /**
@@ -897,6 +1033,7 @@ public class LedDataUtil {
 
     /**
      * 将Bitmap存为 .bmp格式图片
+     * storage/emulated/0/LED_IMG/LedImg_20231104103621
      *
      * @param bitmap
      */
@@ -909,13 +1046,17 @@ public class LedDataUtil {
         int nBmpHeight = bitmap.getHeight();
         // 图像数据大小
         int bufferSize = nBmpHeight * (nBmpWidth * 3 + nBmpWidth % 4);
+        String bmpFilePath = "";
         try {
             // 存储文件名
-            File dir = new File(sdCardDirPath + APP_DIR);
+            File dir = new File(IMG_DIR);
             if (!dir.exists()) {
                 dir.mkdirs();
             }
             File file = new File(dir, fileName);
+            bmpFilePath = file.getAbsolutePath();
+            Log.e("LED图片", file.getAbsolutePath());
+            // storage/emulated/0/LED_IMG/LedImg_20231104103621
             if (!file.exists()) {
                 file.createNewFile();
             }
@@ -955,7 +1096,7 @@ public class LedDataUtil {
             writeDword(fileos, biClrUsed);
             writeDword(fileos, biClrImportant);
             // 像素扫描
-            byte bmpData[] = new byte[bufferSize];
+            byte[] bmpData = new byte[bufferSize];
             int wWidth = (nBmpWidth * 3 + nBmpWidth % 4);
             for (int nCol = 0, nRealCol = nBmpHeight - 1; nCol < nBmpHeight; ++nCol, --nRealCol) {
                 for (int wRow = 0, wByteIdex = 0; wRow < nBmpWidth; wRow++, wByteIdex += 3) {
@@ -969,8 +1110,45 @@ public class LedDataUtil {
             fileos.write(bmpData);
             fileos.flush();
             fileos.close();
+            Log.e("LED图片", file.getAbsolutePath());
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+//            printBmpFile(bmpFilePath);
+        }
+    }
+
+
+    private static void printBmpFile(String bmpFilePath) {
+
+        // 指定BMP文件路径，注意需要读取外部存储权限
+        // 使用BitmapFactory加载BMP文件
+        Bitmap bitmap = null;
+        try {
+            InputStream inputStream = new FileInputStream(new File(bmpFilePath));
+            bitmap = BitmapFactory.decodeStream(inputStream);
+            inputStream.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // 检查Bitmap是否正确加载
+        if (bitmap != null) {
+            int width = bitmap.getWidth();
+            int height = bitmap.getHeight();
+
+            // 遍历所有像素并打印
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    int pixel = bitmap.getPixel(x, y);
+                    Log.d("PixelColor", "Pixel at (" + x + ", " + y + ") - Color: " + pixel);
+                }
+            }
+
+        } else {
+            Log.d("PixelColor", "Bitmap is null");
         }
     }
 
@@ -1084,13 +1262,14 @@ public class LedDataUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
-//        String ledStr = messageStr.toString();
-//        int length = ledStr.length() / matrix;
-//        Log.e(TAG, "alvin 消息 = \n \n \n");
-//        for (int i = 0; i < matrix; i++) {
-//            String temp = ledStr.substring(i * length, i * length + length);
-//            Log.e(TAG, "alvin 消息 = " + convert2Img(temp));
-//        }
+        String ledStr = messageStr.toString();
+        int length = ledStr.length() / matrix;
+        Log.e(TAG, "================================================================================================== \n \n \n");
+        for (int i = 0; i < matrix; i++) {
+            String temp = ledStr.substring(i * length, i * length + length);
+            Log.e(TAG, "alvin 消息 = " + convert2Img(temp));
+        }
+        Log.e(TAG, "================================================================================================== \n \n \n");
         return DataUtils.binaryString2ByteArray(messageStr.toString());
     }
 
@@ -1134,9 +1313,12 @@ public class LedDataUtil {
                 if (isUserFontLib) {
                     //从字库获取
                     tempArray = getLibMsgBytes(context, matrix, msg);
+                    Log.e(TAG, "=================从字库获取");
                 } else {
                     //绘制点阵图
                     Bitmap bitmap = drawBitmap(msg, matrix);
+                    Log.e(TAG, "=================绘制点阵图");
+
                     //获取点阵图数据
                     tempArray = bitmapToByteArray(bitmap);
                 }
@@ -1156,20 +1338,27 @@ public class LedDataUtil {
             //实际的灯珠个数
             int binaryLength = getMessageBinaryLength(msg, matrix, isUserFontLib); //横向灯珠的实际个数 可能不是8的倍数
             int needAppendLength = msgByteLength * 8 - binaryLength; //需要拼接的灯珠数量 每一个横排需要拼接的
-            byte[] tempMsgCrosswiseByte = new byte[msgByteLength];
 
             byte[] tempArray;//当前信息的byte数组长度
             //msg对应的byte长度
             if (isUserFontLib) {
                 //从字库获取
                 tempArray = getLibMsgBytes(context, matrix, msg);
+                Log.e(TAG, "=================从字库获取 111  msgByteLength = " + msgByteLength);
             } else {
                 //绘制点阵图
                 Bitmap bitmap = drawBitmap(msg, matrix);
+                Log.e(TAG, "=================绘制点阵图 111  msgByteLength = " + msgByteLength);
+                String name = "LedImg_" + sdf.format(new Date());
+                saveBmp(bitmap, name);
                 //获取点阵图数据
                 tempArray = bitmapToByteArray(bitmap);
             }
+
             HashMap<Integer, String> map = new HashMap<>();
+            msgByteLength = tempArray.length / matrix;
+            byte[] tempMsgCrosswiseByte = new byte[msgByteLength];
+            Log.e(TAG, "=================tempArray.length = " + tempArray.length + " , msgByteLength = " + msgByteLength);
             for (int i = 0; i < matrix; i++) {
                 System.arraycopy(tempArray, i * msgByteLength, tempMsgCrosswiseByte, 0, msgByteLength);
                 String crosswiseStr = DataUtils.byteArray2BinaryString(tempMsgCrosswiseByte);

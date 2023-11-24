@@ -1,18 +1,20 @@
 {
-  "version": 2,
+  "version": 3,
   "artifactType": {
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.yannis.flexsign",
-  "variantName": "processReleaseResources",
+  "applicationId": "com.yannis.ledcard",
+  "variantName": "release",
   "elements": [
     {
       "type": "SINGLE",
       "filters": [],
-      "versionCode": 6,
-      "versionName": "1.0.6",
+      "attributes": [],
+      "versionCode": 41,
+      "versionName": "3.4.3",
       "outputFile": "app-release.apk"
     }
-  ]
+  ],
+  "elementType": "File"
 }

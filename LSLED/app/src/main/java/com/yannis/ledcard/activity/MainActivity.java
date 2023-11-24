@@ -306,10 +306,15 @@ public class MainActivity extends BaseMVPActivity<MainContract.Presenter> implem
             decorView.setSystemUiVisibility(uiOptions);
         }
     }
+    boolean isTest = false;
 
     @OnClick(R.id.btn_send)
     public void onBtnSendData() {
-        checkBluetoothAndStoragePermission();
+        if (isTest) {
+            presenter.testParseData(sendContentList, pix);
+        } else {
+            checkBluetoothAndStoragePermission();
+        }
     }
 
     private void sendData() {
