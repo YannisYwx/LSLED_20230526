@@ -10,8 +10,8 @@ android {
         applicationId "com.yannis.ledcard"
         minSdkVersion 18
         targetSdkVersion 33
-        versionCode 41//发布新版本修改这里wangdelin leshan,lesun.jks
-        versionName "3.4.3"
+        versionCode 49//发布新版本修改这里wangdelin leshan,lesun.jks
+        versionName "3.5.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -52,6 +52,12 @@ android {
         exclude 'META-INF/metadata.kotlin_module'
         exclude 'META-INF/metadata.jvm.kotlin_module'
     }
+
+    repositories {
+        flatDir() {
+            dirs "libs"
+        }
+    }
 }
 
 configurations.all {
@@ -72,7 +78,8 @@ dependencies {
     })
     testImplementation 'junit:junit:4.12'
     /*数据库*/
-    api 'org.litepal.android:core:1.5.0'
+//    api 'org.litepal.android:core:1.5.0'
+    implementation 'org.litepal.android:core:1.6.1'
     /*依赖注入*/
     implementation 'com.jakewharton:butterknife:10.2.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.1'
@@ -85,4 +92,7 @@ dependencies {
 
     implementation 'no.nordicsemi.android.support.v18:scanner:1.4.2'
     implementation 'com.github.getActivity:ToastUtils:10.5'
+
+    implementation 'com.karumi:dexter:6.2.2' //权限管理
+
 }

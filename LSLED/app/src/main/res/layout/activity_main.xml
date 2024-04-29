@@ -4,15 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    android:orientation="vertical"
     android:fitsSystemWindows="true"
+    android:orientation="vertical"
     tools:context="com.yannis.ledcard.activity.MainActivity">
     <!--自定义状态栏 高度-->
     <View
         android:layout_width="match_parent"
         android:layout_height="25dp"
-        android:visibility="gone"
-        android:background="@android:color/white" />
+        android:background="@android:color/white"
+        android:visibility="gone" />
+
     <include layout="@layout/layout_toolbar" />
 
     <ImageView
@@ -27,6 +28,54 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:clickable="true" />
+
+    <RelativeLayout
+        android:id="@+id/vTextSize"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:visibility="gone"
+        android:padding="20dp">
+
+        <Button
+            android:id="@+id/btn_sub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="20dp"
+            android:background="@drawable/btn_bg"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="-0.1"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="normal" />
+
+        <TextView
+            android:id="@+id/tvTextSize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="#000"
+            android:textSize="18sp"
+            android:text="11+0" />
+
+        <Button
+            android:id="@+id/btn_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/btn_bg"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_marginEnd="20dp"
+            android:text="+0.1"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="normal" />
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"

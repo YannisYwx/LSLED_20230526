@@ -137,6 +137,9 @@ public class LEDBmpFragment extends Fragment {
 //        }
         LEDBmp ledBmp = new LEDBmp(-1);
         subLEDBmpLists.add(ledBmp);
+        for (LEDBmp subLEDBmpList : subLEDBmpLists) {
+            Log.d("====getViewPagerItem","  id = 》》》 " + subLEDBmpList.getId());
+        }
         Log.d("====getViewPagerItem","  " + isEditMode);
         gridView.setAdapter(new LEDBmpGridViewAdapter(getActivity(), subLEDBmpLists, isEditMode));
         gridView.setNumColumns(mColumns);

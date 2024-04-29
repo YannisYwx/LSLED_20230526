@@ -39,6 +39,8 @@ public class LedBleApplication extends LitePalApplication {
 
     private List<LEDBmp> dbLEDBmpList = new ArrayList<>();
 
+    public static float _TEXT_SIZE = 0F;
+
     @SuppressLint("RestrictedApi")
     @Override
     public void onCreate() {
@@ -74,8 +76,11 @@ public class LedBleApplication extends LitePalApplication {
         @Override
         public void onServiceConnected(ComponentName name, IBinder iBinder) {
             Log.d("App-ble", "：服务绑定成功");
-            bleService = ((BLEService.LocalBinder) iBinder).getService();
-//			bleService.connect(device);
+            try {
+                bleService = ((BLEService.LocalBinder) iBinder).getService();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         @Override
@@ -169,7 +174,23 @@ public class LedBleApplication extends LitePalApplication {
         });
     }
 
-    public LEDBmp getLEDBmpById(int id) {
+    public LEDBmp getLEDBmpById(int id, int matrix) {
+        //1-16   17-32  33-48
+        if (id < 48 && id > 0) {
+            int realId = id % 16;
+            if (realId == 0) {
+                realId = 16;
+            }
+            if (matrix == 11) {
+                id = realId;
+            }
+            if (matrix == 12) {
+                id = 16 + realId;
+            }
+            if (matrix == 16) {
+                id = 32 + realId;
+            }
+        }
         for (LEDBmp ledBmp : dbLEDBmpList) {
             if (ledBmp.getId() == id) {
                 return ledBmp;

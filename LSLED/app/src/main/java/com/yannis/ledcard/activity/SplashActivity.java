@@ -58,7 +58,9 @@ public class SplashActivity extends BaseActivity {
                 if (i == 0) {
                     sendContent.setMessage("Welcome");
 //                    sendContent.setMessage("Chào mừng bạn đến với123");
-                    sendContent.setMessage("àừạđếớ-ABCDEFGHIJKLMNOPQRSTUVWXYZ-123567890-abcdefghijklmnopqrstuvwxyz-恭喜发财");
+//                    sendContent.setMessage("àừạđếớ-ABCDEFGHIJKLMNOPQRSTUVWXYZ-123567890-abcdefghijklmnopqrstuvwxyz-恭喜发财");
+//                    sendContent.setMessage("ยินดีต้อนรับ");
+//                    sendContent.setMessage("欢迎gยินดี");
                     sendContent.setSelect(true);
                 }
                 sendContentList.add(sendContent);

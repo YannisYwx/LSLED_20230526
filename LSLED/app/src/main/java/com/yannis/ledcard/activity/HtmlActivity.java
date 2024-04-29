@@ -52,7 +52,8 @@ public class HtmlActivity extends BaseActivity implements View.OnClickListener {
         mWebView.getSettings().setBuiltInZoomControls(true);
         //隐藏缩放工具
         mWebView.getSettings().setDisplayZoomControls(true);
-        final String htmlPrivacyPolicy = "file:///android_asset/052610484855.html";
+//        final String htmlPrivacyPolicy = "file:///android_asset/052610484855.html";
+        final String htmlPrivacyPolicy = "file:///android_asset/privacy_policy.html";
         final String htmlUserAgreement = "file:///android_asset/user_agreement.html";
         mWebView.loadUrl(type == 0 ? htmlUserAgreement : htmlPrivacyPolicy);
     }

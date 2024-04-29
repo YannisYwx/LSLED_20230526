@@ -1,7 +1,10 @@
 package com.yannis.ledcard.ble;
 
+import static android.bluetooth.BluetoothAdapter.ACTION_REQUEST_ENABLE;
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static com.yannis.ledcard.ble.BleDevice.DEVICE_NAME;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
@@ -11,6 +14,7 @@ import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.ParcelUuid;
@@ -19,6 +23,15 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -61,6 +74,12 @@ public class BLEScanner {
         return BLEScannerHolder.INSTANCE;
     }
 
+    public void checkBluetooth(Activity activity) {
+        if (!mBAdapter.isEnabled()) {
+            openBluetooth(activity);
+        }
+    }
+
     public void initBLE(Application application) {
         mScanner = BluetoothLeScannerCompat.getScanner();
         handler = new Handler(Looper.getMainLooper());
@@ -80,9 +99,10 @@ public class BLEScanner {
                 return;
             }
         }
-        if (!mBAdapter.isEnabled()) {
-            mBAdapter.enable();
-        }
+//        if (!mBAdapter.isEnabled()) {
+////            mBAdapter.enable();
+//            openBluetooth(application);
+//        }
         mScanSettings = new ScanSettings.Builder()
                 .setLegacy(false)
                 .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
@@ -213,4 +233,62 @@ public class BLEScanner {
 
         void logInfo(String msg);
     }
+
+    public static void openBluetooth(Activity activity) {
+        BluetoothManager manager = (BluetoothManager) activity.getSystemService(Context.BLUETOOTH_SERVICE);
+        BluetoothAdapter adapter = manager.getAdapter();
+        if (adapter != null && !adapter.isEnabled()) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+                BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                bluetoothAdapter.enable();
+            } else {
+                boolean isGetBTScanPermission = ContextCompat.checkSelfPermission(activity, Manifest.permission.BLUETOOTH_SCAN)
+                        == PERMISSION_GRANTED; //android 12 需要BLUETOOTH_SCAN新权限
+                if (isGetBTScanPermission) {
+                    BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+//                    bluetoothAdapter.enable();
+                    activity.startActivity(new Intent(ACTION_REQUEST_ENABLE));
+                } else {
+
+                    boolean isNeedExplanation = ActivityCompat.shouldShowRequestPermissionRationale(activity,
+                            Manifest.permission.BLUETOOTH_SCAN);
+
+                    if (isNeedExplanation) {
+                        Toast.makeText(activity, "BLUETOOTH_SCAN permission is denied", Toast.LENGTH_SHORT).show();
+                    } else {
+                        List<String> permissionList = new ArrayList<>();
+                        permissionList.add(Manifest.permission.BLUETOOTH_SCAN);
+                        permissionList.add(Manifest.permission.BLUETOOTH_ADVERTISE);
+                        permissionList.add(Manifest.permission.BLUETOOTH_CONNECT);
+                        Dexter.withContext(activity)
+                                .withPermissions(permissionList)
+                                .withListener(new MultiplePermissionsListener() {
+                                    @Override
+                                    public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) {
+//                                        for (PermissionGrantedResponse grantedResponse : multiplePermissionsReport.getGrantedPermissionResponses()) {
+//                                            Logger.t(TAG).e("onPermissionsChecked:Granted::::" + grantedResponse.getRequestedPermission().toString());
+//                                        }
+//                                        for (PermissionDeniedResponse deniedResponse : multiplePermissionsReport.getDeniedPermissionResponses()) {
+//                                            Logger.t(TAG).e("onPermissionsChecked:Denied::::" + deniedResponse.getRequestedPermission().toString());
+//                                        }
+                                        if (multiplePermissionsReport.getGrantedPermissionResponses().size() == 3) {
+                                            BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                                            bluetoothAdapter.enable();
+                                        } else {
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> list, PermissionToken permissionToken) {
+//                                        for (PermissionRequest permissionRequest : list) {
+//                                            Logger.t("TAG").e("onPermissionRationaleShouldBeShown::::" + permissionRequest.toString());
+//                                        }
+                                    }
+                                }).check();
+                    }
+                }
+            }
+        }
+    }
+
 }

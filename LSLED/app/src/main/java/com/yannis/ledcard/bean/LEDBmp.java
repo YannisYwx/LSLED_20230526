@@ -29,6 +29,8 @@ public class LEDBmp extends DataSupport implements Serializable {
      */
     private int resourceID;
 
+    private String resourceName;
+
     public LEDBmp(String content, int matrix, String filePath) {
         this.content = content;
         this.matrix = matrix;
@@ -87,6 +89,14 @@ public class LEDBmp extends DataSupport implements Serializable {
         this.filePath = filePath;
     }
 
+    public String getResourceName() {
+        return resourceName;
+    }
+
+    public void setResourceName(String resourceName) {
+        this.resourceName = resourceName;
+    }
+
     @Override
     public String toString() {
         return "LEDBmp{" +
@@ -94,7 +104,7 @@ public class LEDBmp extends DataSupport implements Serializable {
                 ", content='" + content + '\'' +
                 ", matrix=" + matrix +
                 ", filePath='" + filePath + '\'' +
-                ", resourceID ='" + resourceID  +
+                ", resourceID ='" + resourceID +
                 '}';
     }
 }

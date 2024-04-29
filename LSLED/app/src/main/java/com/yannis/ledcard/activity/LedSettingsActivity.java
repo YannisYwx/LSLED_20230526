@@ -71,7 +71,7 @@ public class LedSettingsActivity extends BaseActivity implements LEDBmpFragment.
     public EditText et_content;
     @BindView(R.id.rl_color)
     public RelativeLayout rl_color;
-//    @BindView(R.id.ci_color)
+    //    @BindView(R.id.ci_color)
 //    public CircleImageView circleImageView;
     @BindView(R.id.tv_toolbar_left)
     public TextView tvLeft;
@@ -186,9 +186,9 @@ public class LedSettingsActivity extends BaseActivity implements LEDBmpFragment.
                 break;
             case R.id.tv_right:
                 Log.d("Edit Touched Down", "111111111");
-                if(!isEditMode) {
+                if (!isEditMode) {
                     tvRight.setText("完成");
-                }else {
+                } else {
                     tvRight.setText("删除图片");
                 }
                 isEditMode = !isEditMode;
@@ -309,9 +309,13 @@ public class LedSettingsActivity extends BaseActivity implements LEDBmpFragment.
                     Drawable drawable;
                     if (filePath != null) {
                         drawable = Drawable.createFromPath(filePath);
-                    }
-                    else {
-                        drawable = context.getResources().getDrawable(ledBmp.getResourceID());
+                    } else {
+                        try {
+                            drawable = context.getResources().getDrawable(ledBmp.getResourceID());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            drawable = null;
+                        }
                     }
                     if (drawable != null) {
                         int size = (int) (33 * context.getResources().getDisplayMetrics().density);

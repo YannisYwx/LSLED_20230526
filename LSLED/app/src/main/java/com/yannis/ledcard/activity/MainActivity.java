@@ -23,11 +23,13 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.yannis.ledcard.LedBleApplication;
 import com.yannis.ledcard.R;
 import com.yannis.ledcard.adapter.SendListAdapter;
 import com.yannis.ledcard.base.BaseMVPActivity;
 import com.yannis.ledcard.bean.LedImg;
 import com.yannis.ledcard.bean.SendContent;
+import com.yannis.ledcard.ble.BLEScanner;
 import com.yannis.ledcard.contract.MainContract;
 import com.yannis.ledcard.presenter.MainPresenter;
 import com.yannis.ledcard.util.DialogUtil;
@@ -50,6 +52,8 @@ import org.litepal.crud.DataSupport;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.logging.Logger;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -92,6 +96,17 @@ public class MainActivity extends BaseMVPActivity<MainContract.Presenter> implem
     @BindView(R.id.tv_toolbar_center)
     public TextView tvContext;
 
+    @BindView(R.id.btn_sub)
+    public Button btnSub;
+    @BindView(R.id.btn_add)
+    public Button btnAdd;
+    @BindView(R.id.tvTextSize)
+    public TextView tvTextSize;
+    @BindView(R.id.vTextSize)
+    public View vTextSize;
+
+    int clickCount = 0;
+
     private Context context;
 
     public AlertDialog dialog;
@@ -115,6 +130,7 @@ public class MainActivity extends BaseMVPActivity<MainContract.Presenter> implem
     @Override
     protected void initData() {
         try {
+            BLEScanner.getInstance().checkBluetooth(this);
             findViewById(R.id.tv_right).setVisibility(View.VISIBLE);
             findViewById(R.id.iv_back).setVisibility(View.INVISIBLE);
             tvContext.setText(getString(R.string.title_sendList));
@@ -128,26 +144,62 @@ public class MainActivity extends BaseMVPActivity<MainContract.Presenter> implem
             } else {
                 ifIsNeedShowPixDialog();
             }
+//            tvContext.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    clickCount++;
+//                    if (clickCount > 8) {
+//                        vTextSize.setVisibility(View.VISIBLE);
+//                        resetTextSizeShow();
+//                    }
+//                }
+//            });
+//            btnAdd.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    LedBleApplication._TEXT_SIZE += 0.1F;
+//                    resetTextSizeShow();
+//                }
+//            });
+//            btnSub.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    LedBleApplication._TEXT_SIZE -= 0.1F;
+//                    resetTextSizeShow();
+//                }
+//            });
+
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
+    private void resetTextSizeShow() {
+        int pix = PrefUtils.getIntFromPrefs(MainActivity.this, PIX, 11);
+        tvTextSize.setText(pix + " + " + String.format(Locale.CHINA, "%.1f", LedBleApplication._TEXT_SIZE));
+        Log.d("字体大小", (pix + LedBleApplication._TEXT_SIZE) + "");
+    }
+
     /**
      * 是否需要显示设置点阵弹框
      */
     private void ifIsNeedShowPixDialog() {
-        boolean isFirstInApp = PrefUtils.getBooleanFromPrefs(this, IS_FIRST_IN_APP, true);
-        if (isFirstInApp) {
-            PrefUtils.saveBooleanToPrefs(this, IS_FIRST_IN_APP, false);
+        new Thread(() -> {
+            boolean isFirstInApp = PrefUtils.getBooleanFromPrefs(this, IS_FIRST_IN_APP, true);
+            if (isFirstInApp) {
+                PrefUtils.saveBooleanToPrefs(this, IS_FIRST_IN_APP, false);
 
-            LedDataUtil.configureDefaultPics(this, 11);
-            LedDataUtil.configureDefaultPics(this, 12);
-            LedDataUtil.configureDefaultPics(this, 16);
+                LedDataUtil.configureDefaultPics(11);
+                LedDataUtil.configureDefaultPics(12);
+                LedDataUtil.configureDefaultPics(16);
+                LedBleApplication.instance.loadLEDBmpFromDB();
+                runOnUiThread(() -> showSetPixDialog(0));
+            }
+        }).start();
 
-            showSetPixDialog(0);
-        }
     }
 
     private void showPrivacyDialog() {
@@ -306,6 +358,7 @@ public class MainActivity extends BaseMVPActivity<MainContract.Presenter> implem
             decorView.setSystemUiVisibility(uiOptions);
         }
     }
+
     boolean isTest = false;
 
     @OnClick(R.id.btn_send)
@@ -419,6 +472,7 @@ public class MainActivity extends BaseMVPActivity<MainContract.Presenter> implem
 //                        DataSupport.update(SendContent.class, contentValues, sendContent.getId());
 //                    }
 //                    adapter.notifyDataSetChanged();
+
                     PrefUtils.saveIntToPrefs(MainActivity.this, PIX, pix);
                 }
             }

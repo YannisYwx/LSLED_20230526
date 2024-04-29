@@ -1,5 +1,6 @@
 package com.yannis.ledcard.util;
 
+import static com.yannis.ledcard.LedBleApplication._TEXT_SIZE;
 import static com.yannis.ledcard.activity.MainActivity.SDF;
 
 import android.content.Context;
@@ -93,12 +94,21 @@ public class LedDataUtil {
         return sb.toString();
     }
 
+    public static final HashMap<String,List<LEDBmp>> ledBmpMatrixArray = new HashMap<>();
+
+    public static void loadDefaultLEDBmp2Cache(){
+        ledBmpMatrixArray.clear();
+        configureDefaultPics(11);
+        configureDefaultPics(12);
+        configureDefaultPics(16);
+    }
+
     /**
      * 获取led图片列表
      *
      * @return
      */
-    public static void configureDefaultPics(Context context, int matrix) {
+    public static void configureDefaultPics(int matrix) {
         String[] content = new String[16];
         switch (matrix) {
             case 11:
@@ -111,14 +121,10 @@ public class LedDataUtil {
                 content = MainMode.picture16Content;
                 break;
         }
+        List<LEDBmp> ledBmpList = new ArrayList<>();
         for (int i = 0; i < 16; i++) {
             LEDBmp ledImg = null;
-//            Bitmap bitmap;
-//
-//            String fileName = BitmapUtils.generateFileName();
-//            String dir = BitmapUtils.getBmpDir();
             int resourceID = 0;
-
             switch (i) {
                 case 0:
                     resourceID = R.drawable.img5;
@@ -171,12 +177,22 @@ public class LedDataUtil {
                 default:
                     resourceID = R.drawable.img5;
                     break;
-
             }
-
             ledImg = new LEDBmp(content[i], matrix, resourceID);
+            ledBmpList.add(ledImg);
             ledImg.save();
         }
+//        switch (matrix) {
+//            case 11:
+//                ledBmpMatrixArray.put("11",ledBmpList);
+//                break;
+//            case 12:
+//                ledBmpMatrixArray.put("12",ledBmpList);
+//                break;
+//            case 16:
+//                ledBmpMatrixArray.put("16",ledBmpList);
+//                break;
+//        }
     }
 
 
@@ -859,15 +875,15 @@ public class LedDataUtil {
 
     public static Bitmap drawBitmap(String text, int matrix) {
         Paint paint = new Paint();
-        paint.setTextSize(matrix * 1f);
+        paint.setTextSize(matrix + _TEXT_SIZE);
         paint.setTextAlign(Paint.Align.CENTER);
         paint.setAntiAlias(false);
-        Typeface typeface = Typeface.createFromAsset(LedBleApplication.instance.getAssets(), "fonts/typeface1456.ttf");
+//        Typeface typeface = Typeface.createFromAsset(LedBleApplication.instance.getAssets(), "fonts/typeface1456.ttf");
 //        Typeface typeface = Typeface.createFromAsset(LedBleApplication.instance.getAssets(), "fonts/tahoma.ttf");
 //        Typeface typeface = Typeface.createFromAsset(LedBleApplication.instance.getAssets(), "fonts/ARIAL.TTF");
 //        Typeface typeface = Typeface.createFromAsset(LedBleApplication.instance.getAssets(), "fonts/12.TTF");
 //        Typeface typeface = Typeface.createFromAsset(LedBleApplication.instance.getAssets(), "fonts/simsun.ttc");
-        paint.setTypeface(typeface);
+//        paint.setTypeface(typeface);
         int width = (int) ViewUtils.getTextRectWidth(paint, text);
         Bitmap bitmap = Bitmap.createBitmap(width, matrix, Bitmap.Config.RGB_565);
         Canvas canvas = new Canvas(bitmap);
@@ -1192,6 +1208,10 @@ public class LedDataUtil {
             String group = matcher.group();
             ledBmpList.add(group);
         }
+        for (int i = 0; i < ledBmpList.size(); i++) {
+            Log.d("alvin 消息", "图片" + i + " ---- " + ledBmpList.get(i));
+        }
+
         if (ledBmpList.size() > 0) {
             int startIndex, endIndex;
             for (int i = 0; i < ledBmpList.size(); i++) {
@@ -1227,6 +1247,7 @@ public class LedDataUtil {
      * @return
      */
     public static byte[] getMessageByteArray(Context context, String message, int matrix) {
+        Log.e(TAG, "alvin 消息 ======= " + message);
         //解析的数据集合
         List<String> msgArray = parseMessage(message);
         //本信息的字节长度
@@ -1284,13 +1305,15 @@ public class LedDataUtil {
      * @param matrix
      */
     private static void initMsgContentMap(Context context, String msg, int matrix) {
+        Log.e(TAG, "=================initMsgContentMap  msg = " + msg);
         if (msg.startsWith("[LED") && msg.endsWith("]")) {
             String key = msg;
             msg = msg.replace("[LED", "");
             msg = msg.replace("]", "");
             int id = Integer.parseInt(msg);
-            LEDBmp ledBmp = LedBleApplication.instance.getLEDBmpById(id);
+            LEDBmp ledBmp = LedBleApplication.instance.getLEDBmpById(id, matrix);
             if (ledBmp != null) { //如果是保存的图片
+                Log.e(TAG, "alvin 消息 =  " + msg + " 从数据库中获取的图片数据为::" + ledBmp.toString());
                 HashMap<Integer, String> map = new HashMap<>();
                 String content = ledBmp.getContent();
                 int colSize = content.length() / matrix; //一行多少个灯珠
@@ -1300,6 +1323,8 @@ public class LedDataUtil {
                 }
                 msgBinaryMap.put(key, map);
             } else {
+                Log.e(TAG, "alvin 消息 =  " + msg + " 从数据库中获取的图片数据为null");
+
                 boolean isUserFontLib = LangUtils.isUserFontLib(msg);
                 //信息字节长度
                 int msgByteLength = getSingleMsgByteLength(msg, matrix, isUserFontLib);//消息byte数组长度  8的倍数 0xFF
@@ -1391,7 +1416,7 @@ public class LedDataUtil {
             msg = msg.replace("[LED", "");
             msg = msg.replace("]", "");
             int id = Integer.parseInt(msg);
-            LEDBmp ledBmp = LedBleApplication.instance.getLEDBmpById(id);
+            LEDBmp ledBmp = LedBleApplication.instance.getLEDBmpById(id, matrix);
 //            LEDBmp ledBmp = DataSupport.find(LEDBmp.class, id);
             if (ledBmp != null) {
                 String content = ledBmp.getContent();
@@ -1457,6 +1482,7 @@ public class LedDataUtil {
         int length = 0;
         List<String> msgArray = parseMessage(msg);
         for (String str : msgArray) {
+            Log.d("分解的字符串", "=== str =>" + str);
             length += getMessageBinaryLength(str, matrix);
         }
         return (length + 7) / 8;
@@ -1496,7 +1522,7 @@ public class LedDataUtil {
             String idStr = content.replace("[LED", "");
             idStr = idStr.replace("]", "");
             int id = Integer.parseInt(idStr);
-            LEDBmp ledBmp = LedBleApplication.instance.getLEDBmpById(id);
+            LEDBmp ledBmp = LedBleApplication.instance.getLEDBmpById(id, matrix);
             //LEDBmp ledBmp = DataSupport.find(LEDBmp.class, id);
             if (ledBmp != null) {
                 return ledBmp.getContent().length() / matrix;

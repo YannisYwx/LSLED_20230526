@@ -355,7 +355,7 @@ public class BitmapUtils {
             String idStr = name.replace("[LED", "");
             idStr = idStr.replace("]", "");
             int id = Integer.parseInt(idStr);
-            LEDBmp ledBmp = LedBleApplication.instance.getLEDBmpById(id);
+            LEDBmp ledBmp = LedBleApplication.instance.getLEDBmpById(id,11);
 //            LEDBmp ledBmp = DataSupport.find(LEDBmp.class, id);
             String filePath = ledBmp.getFilePath();
             if (new File(filePath).exists()) {
