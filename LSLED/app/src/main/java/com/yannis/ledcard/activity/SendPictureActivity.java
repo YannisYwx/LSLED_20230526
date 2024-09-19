@@ -282,6 +282,26 @@ public class SendPictureActivity extends BaseMVPActivity<MainContract.Presenter>
     }
 
     @Override
+    public void connectDevice() {
+
+    }
+
+    @Override
+    public void connectSuccess() {
+
+    }
+
+    @Override
+    public void sendTimeout() {
+
+    }
+
+    @Override
+    public void sendFailed() {
+
+    }
+
+    @Override
     public void startScan() {
 
     }

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">LEDBadge</string>
     <string name="title_sendList">전송 목록</string>
     <string name="settings">설정</string>
     <string name="edit">편집</string>
@@ -21,6 +20,8 @@
     <string name="no_data">데이터가 없다</string>
     <string name="cancel">취소</string>
     <string name="send_content">송신 내용</string>
+    <string name="scan_list">검색 목록</string>
+
     <array name="speedStr">
         <item>1</item>
         <item>2</item>
@@ -114,4 +115,7 @@ By clicking "Agree and continue", you mean that you have read and agree to the a
     <string name="privacy_policy_and_user_agreement">Privacy Policy &amp; User Agreement </string>
     <string name="reject">Reject</string>
     <string name="agree">Agree</string>
+    <string name="permission_locaiton_content">Bluetooth 장치를 검색하려면 위치 권한이 필요합니다.</string>
+    <string name="bluetooth_scan_permission">장치를 스캔하려면 앱이 주변 Bluetooth 장치에 액세스하고 Bluetooth 스위치를 켤 수 있도록 허용해야 합니다. 설정에서 관리할 수 있습니다</string>
+    <string name="bluetooth_is_close">블루투스 스위치가 꺼져 있습니다. 휴대폰의 블루투스를 켜주세요.</string>
 </resources>

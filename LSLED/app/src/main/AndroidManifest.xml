@@ -61,6 +61,17 @@
             android:exported="false"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SpeedAndModelSelectActivity"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.BleScanActivity"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
 
         <service
             android:name="com.yannis.ledcard.ble.BLEService"

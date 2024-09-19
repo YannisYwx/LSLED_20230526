@@ -2,9 +2,12 @@ package com.yannis.ledcard.activity;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
+import static com.yannis.ledcard.activity.BleScanActivity.SELECT_ADDRESS;
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.bluetooth.BluetoothAdapter;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +16,8 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -20,6 +25,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -36,6 +42,11 @@ import com.yannis.ledcard.util.DialogUtil;
 import com.yannis.ledcard.util.LedDataUtil;
 import com.yannis.ledcard.util.PermisionUtils;
 import com.yannis.ledcard.util.PrefUtils;
+import com.yannis.ledcard.widget.dialog.AwesomeErrorDialog;
+import com.yannis.ledcard.widget.dialog.AwesomeInfoDialog;
+import com.yannis.ledcard.widget.dialog.AwesomeProgressDialog;
+import com.yannis.ledcard.widget.dialog.AwesomeSuccessDialog;
+import com.yannis.ledcard.widget.dialog.interfaces.Closure;
 
 import android.text.SpannableStringBuilder;
 import android.text.style.ClickableSpan;
@@ -91,6 +102,8 @@ public class MainActivity extends BaseMVPActivity<MainContract.Presenter> implem
     public ListView listView;
     @BindView(R.id.btn_send)
     public Button btnSend;
+    @BindView(R.id.btnSend)
+    public Button btnSendData;
     @BindView(R.id.btn_settings)
     public Button btnSettings;
     @BindView(R.id.tv_toolbar_center)
@@ -104,6 +117,8 @@ public class MainActivity extends BaseMVPActivity<MainContract.Presenter> implem
     public TextView tvTextSize;
     @BindView(R.id.vTextSize)
     public View vTextSize;
+    @BindView(R.id.iv_back)
+    public ImageView ivLeft;
 
     int clickCount = 0;
 
@@ -124,15 +139,21 @@ public class MainActivity extends BaseMVPActivity<MainContract.Presenter> implem
     @Override
     protected void init() {
         context = this;
-        pix = PrefUtils.getIntFromPrefs(this, PIX, 11);
+        if (LedBleApplication.instance.isJapanApp()) {
+            pix = 12;
+        } else {
+            pix = PrefUtils.getIntFromPrefs(this, PIX, 11);
+        }
     }
 
     @Override
     protected void initData() {
+        initDialog();
         try {
             BLEScanner.getInstance().checkBluetooth(this);
             findViewById(R.id.tv_right).setVisibility(View.VISIBLE);
-            findViewById(R.id.iv_back).setVisibility(View.INVISIBLE);
+            findViewById(R.id.iv_back).setVisibility(View.VISIBLE);
+            ivLeft.setImageResource(R.drawable.bluetooth);
             tvContext.setText(getString(R.string.title_sendList));
             sendContentList = DataSupport.findAll(SendContent.class);
             Log.d(TAG, sendContentList.toString());
@@ -170,11 +191,24 @@ public class MainActivity extends BaseMVPActivity<MainContract.Presenter> implem
 //            });
 
 
-
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+        ivLeft.setOnClickListener(v -> {
+            btnSend.setEnabled(true);
+            startActivityForResult(new Intent(MainActivity.this, BleScanActivity.class), 789);
+        });
+
+        if (LedBleApplication.instance.isJapanApp()) {
+            btnSendData.setVisibility(View.VISIBLE);
+            btnSend.setVisibility(View.INVISIBLE);
+            btnSettings.setVisibility(View.INVISIBLE);
+        } else {
+            btnSendData.setVisibility(View.INVISIBLE);
+            btnSend.setVisibility(View.VISIBLE);
+            btnSettings.setVisibility(View.VISIBLE);
+        }
     }
 
     private void resetTextSizeShow() {
@@ -187,19 +221,22 @@ public class MainActivity extends BaseMVPActivity<MainContract.Presenter> implem
      * 是否需要显示设置点阵弹框
      */
     private void ifIsNeedShowPixDialog() {
-        new Thread(() -> {
-            boolean isFirstInApp = PrefUtils.getBooleanFromPrefs(this, IS_FIRST_IN_APP, true);
-            if (isFirstInApp) {
-                PrefUtils.saveBooleanToPrefs(this, IS_FIRST_IN_APP, false);
+        if (LedBleApplication.instance.isJapanApp()) {
+            PrefUtils.saveIntToPrefs(MainActivity.this, PIX, 12);
+        } else {
+            new Thread(() -> {
+                boolean isFirstInApp = PrefUtils.getBooleanFromPrefs(this, IS_FIRST_IN_APP, true);
+                if (isFirstInApp) {
+                    PrefUtils.saveBooleanToPrefs(this, IS_FIRST_IN_APP, false);
 
-                LedDataUtil.configureDefaultPics(11);
-                LedDataUtil.configureDefaultPics(12);
-                LedDataUtil.configureDefaultPics(16);
-                LedBleApplication.instance.loadLEDBmpFromDB();
-                runOnUiThread(() -> showSetPixDialog(0));
-            }
-        }).start();
-
+                    LedDataUtil.configureDefaultPics(11);
+                    LedDataUtil.configureDefaultPics(12);
+                    LedDataUtil.configureDefaultPics(16);
+                    LedBleApplication.instance.loadLEDBmpFromDB();
+                    runOnUiThread(() -> showSetPixDialog(0));
+                }
+            }).start();
+        }
     }
 
     private void showPrivacyDialog() {
@@ -324,6 +361,8 @@ public class MainActivity extends BaseMVPActivity<MainContract.Presenter> implem
     @Override
     protected void onResume() {
         super.onResume();
+//        presenter.stopScanDevice();
+//        btnSend.setEnabled(true);
     }
 
     @Override
@@ -361,14 +400,21 @@ public class MainActivity extends BaseMVPActivity<MainContract.Presenter> implem
 
     boolean isTest = false;
 
-    @OnClick(R.id.btn_send)
+    @OnClick({R.id.btn_send, R.id.btnSend})
     public void onBtnSendData() {
         if (isTest) {
             presenter.testParseData(sendContentList, pix);
         } else {
-            checkBluetoothAndStoragePermission();
+            BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+            if (adapter.isEnabled()) {
+                checkBluetoothAndStoragePermission();
+            } else {
+                showMsg(getString(R.string.bluetooth_is_close));
+            }
         }
     }
+
+    private String selectMacAddress = null;
 
     private void sendData() {
         boolean isSelect = false;
@@ -388,10 +434,19 @@ public class MainActivity extends BaseMVPActivity<MainContract.Presenter> implem
         }
     }
 
+    int textCount = 0;
+
     @OnClick({R.id.tv_right})
     public void toAbout() {
         switchTo(AboutActivity.class);
+//        textCount++;
+//        if (textCount % 2 == 0) {
+//            sendTimeout();
+//        } else {
+//            sendFailed();
+//        }
     }
+
 
     @OnClick({R.id.btn_settings})
     public void onBtnSettings() {
@@ -423,6 +478,12 @@ public class MainActivity extends BaseMVPActivity<MainContract.Presenter> implem
             contentValues.put("isMarquee", sendContent.isMarquee());
             contentValues.put("isSelect", sendContent.isSelect());
             DataSupport.update(SendContent.class, contentValues, sendContent.getId());
+        }
+
+        if (requestCode == 789 && resultCode == 987) {
+            selectMacAddress = data.getStringExtra(SELECT_ADDRESS);
+            this.presenter.setSelectAddress(selectMacAddress);
+            showMsg("选中的设备：" + selectMacAddress);
         }
 
         if (requestCode == 520 && resultCode == Activity.RESULT_CANCELED) {
@@ -505,11 +566,13 @@ public class MainActivity extends BaseMVPActivity<MainContract.Presenter> implem
     @Override
     public void startSend() {
         Log.e(TAG, "发送计算:" + "开始发送 = " + SDF.format(new Date()));
+        showSendingDialog();
     }
 
     @Override
     public void sendFinished() {
         Log.e(TAG, "发送计算:" + "发送完成 = " + SDF.format(new Date()));
+        showSendCompleteDialog();
     }
 
     @Override
@@ -537,22 +600,20 @@ public class MainActivity extends BaseMVPActivity<MainContract.Presenter> implem
             if (requestCode == PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION) {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //同意权限
-                    showToast("同意权限");
                     sendData();
                 } else {
                     // 权限拒绝
                     // 下面的方法最好写一个跳转，可以直接跳转到权限设置页面，方便用户
-                    showToast("权限拒绝");
+                    showToast(getString(R.string.permission_locaiton_content));
                 }
             } else if (requestCode == PERMISSIONS_REQUEST_BLUETOOTH_SCAN_CONNECT) {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //同意权限
-                    showToast("同意权限");
                     sendData();
                 } else {
                     // 权限拒绝
                     // 下面的方法最好写一个跳转，可以直接跳转到权限设置页面，方便用户
-                    showToast("权限拒绝");
+                    showToast(getString(R.string.bluetooth_scan_permission));
                 }
             }
         }
@@ -563,10 +624,8 @@ public class MainActivity extends BaseMVPActivity<MainContract.Presenter> implem
       */
     private void checkBluetoothAndStoragePermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
-
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 if (!isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                    showToast("申请权限");
                     requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
                             PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION);
                 } else {
@@ -575,7 +634,6 @@ public class MainActivity extends BaseMVPActivity<MainContract.Presenter> implem
                 }
             } else {
                 if (!isPermissionGranted(Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                    showToast("申请权限");
                     requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
                             PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION);
                 } else {
@@ -585,7 +643,6 @@ public class MainActivity extends BaseMVPActivity<MainContract.Presenter> implem
             }
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             if (!isPermissionGranted(Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT)) {
-                showToast("申请权限");
                 requestPermissions(new String[]{Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT},
                         PERMISSIONS_REQUEST_BLUETOOTH_SCAN_CONNECT);
             } else {
@@ -617,6 +674,111 @@ public class MainActivity extends BaseMVPActivity<MainContract.Presenter> implem
                     == PERMISSION_GRANTED;
         }
         return isScanPermissionGranted;
+    }
+
+    private AwesomeProgressDialog sendingDialog = null;
+    private AwesomeSuccessDialog sendSuccessDialog = null;
+    private AwesomeErrorDialog errorDialog = null;
+    private final Handler handler = new Handler(Looper.getMainLooper());
+
+    private void showSendingDialog() {
+        Log.e("-->Main", "=======================>showSendingDialog");
+        if (sendingDialog == null) {
+            initDialog();
+        }
+        sendingDialog.setTitle(R.string.sending_data);
+    }
+
+    private void initDialog() {
+        sendingDialog = new AwesomeProgressDialog(this)
+                .setTitle(R.string.sending_data)
+                .showMessage(false)
+                .setColoredCircle(R.color.dialogInfoBackgroundColor)
+                .setDialogIconAndColor(R.drawable.ic_dialog_info, R.color.white)
+                .setCancelable(false);
+
+        sendSuccessDialog = new AwesomeSuccessDialog(this)
+                .setTitle(R.string.send_data_over)
+                .showMessage(false)
+                .setColoredCircle(R.color.dialogSuccessBackgroundColor)
+                .setDialogIconAndColor(R.drawable.ic_dialog_info, R.color.white)
+                .setCancelable(false)
+                .showDoneButton(true)
+                .showNegativeButton(false)
+                .showPositiveButton(false);
+
+        errorDialog = new AwesomeErrorDialog(this)
+                .showMessage(false)
+                .setColoredCircle(R.color.dialogErrorBackgroundColor)
+                .setDialogIconAndColor(R.drawable.ic_dialog_error, R.color.white)
+                .setCancelable(false).setButtonText(getString(R.string.dialog_ok_button))
+                .setButtonBackgroundColor(R.color.dialogErrorBackgroundColor)
+                .setButtonText(getString(R.string.dialog_ok_button))
+                .setErrorButtonClick(new Closure() {
+                    @Override
+                    public void exec() {
+                        // click
+                        errorDialog.hide();
+                    }
+                });
+    }
+
+    private void showSendCompleteDialog() {
+        if (sendingDialog != null) {
+            sendingDialog.hide();
+        }
+        sendSuccessDialog.show();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (sendingDialog != null) {
+                    sendingDialog.hide();
+                }
+                if (sendSuccessDialog != null) {
+                    sendSuccessDialog.hide();
+                }
+            }
+        }, 2000);
+    }
+
+
+    @Override
+    public void connectDevice() {
+        if (sendingDialog == null) {
+            initDialog();
+        }
+        sendingDialog.setTitle("连接设备中");
+        sendingDialog.show();
+    }
+
+    @Override
+    public void connectSuccess() {
+        if (sendingDialog == null) {
+            initDialog();
+        }
+        sendingDialog.setTitle(R.string.connect_success);
+    }
+
+    @Override
+    public void sendTimeout() {
+        if (errorDialog == null) {
+            initDialog();
+        }
+        errorDialog.setTitle(R.string.send_timeout);
+        if (!errorDialog.getBaseDialog().isShowing()) {
+            errorDialog.show();
+        }
+    }
+
+    @Override
+    public void sendFailed() {
+        if (errorDialog == null) {
+            initDialog();
+        }
+        errorDialog.setTitle(R.string.send_failed);
+        if (!errorDialog.getBaseDialog().isShowing()) {
+            errorDialog.show();
+        }
     }
 
 }

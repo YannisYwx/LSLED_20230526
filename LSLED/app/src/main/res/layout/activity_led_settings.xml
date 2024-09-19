@@ -45,16 +45,19 @@
         android:padding="5dp"
         android:text="اليوم هو يوم السبت "
         android:textSize="16sp" />
+
     <FrameLayout
         android:id="@+id/fl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+
     <ImageView
         android:id="@+id/bmp"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:visibility="gone"
         android:layout_gravity="center_horizontal"/>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">LED显示屏发送软件</string>
     <string name="title_sendList">发送列表</string>
     <string name="settings">设置</string>
     <string name="edit">编辑</string>
     <string name="about">关于</string>
     <string name="return_back">返回</string>
-    <string name="delete_pic">删除图片</string>
     <string name="edit_pic">编辑图片</string>
     <string name="pick_pic">选择图片</string>
     <string name="origin_pic">[原图]</string>
@@ -60,7 +58,6 @@
     <string name="send_over">发送完毕</string>
     <string name="connect_success">连接成功</string>
 
-
     <string name="diangzheng11">11点阵</string>
     <string name="diangzheng12">12点阵</string>
     <string name="diangzheng16">16点阵</string>
@@ -100,4 +97,9 @@
     <string name="privacy_policy_and_user_agreement">用户协议与隐私政策</string>
     <string name="reject">拒绝</string>
     <string name="agree">同意并继续</string>
+    <string name="scan_list">搜索列表</string>
+    <string name="delete_pic">删除图片</string>
+    <string name="permission_locaiton_content">扫描蓝牙设备需要定位权限</string>
+    <string name="bluetooth_scan_permission">扫描设备需允许应用访问周围蓝牙设备并保持蓝牙开关开启。你可以在设置中进行管理</string>
+    <string name="bluetooth_is_close">蓝牙开关已关闭，请开启手机蓝牙</string>
 </resources>

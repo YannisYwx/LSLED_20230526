@@ -84,6 +84,21 @@
         android:padding="20dp">
 
         <Button
+            android:id="@+id/btnSend"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/btn_bg"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:visibility="invisible"
+            android:text="@string/send"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="normal" />
+
+        <Button
             android:id="@+id/btn_send"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

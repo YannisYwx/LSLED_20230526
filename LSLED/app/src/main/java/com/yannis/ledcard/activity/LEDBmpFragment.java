@@ -75,7 +75,7 @@ public class LEDBmpFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_emoji_bottom, null);
         mCirclePointIndicatorView = (CirclePointIndicatorView) view.findViewById(R.id.circle_point_indicator_view);
         mViewPager = (ViewPager) view.findViewById(R.id.vp_emoji);
-        Log.d("=======onCreateView","false");
+        Log.d("=======onCreateView", "false");
         refreshLEDBmpView(false);
         return view;
     }
@@ -83,7 +83,7 @@ public class LEDBmpFragment extends Fragment {
     public void refreshLEDBmpView(boolean isEditMode) {
         mLEDBmps = new ArrayList<>();
         this.isEditMode = isEditMode;
-        Log.d("=======refreshLED","  " + isEditMode);
+        Log.d("=======refreshLED", "  " + isEditMode);
         final int ledSize = PrefUtils.getIntFromPrefs(this.getContext(), PIX, 11);
         mLEDBmps.addAll(DataSupport.where("matrix = ?", ledSize + "").find(LEDBmp.class));
 //        mLEDBmps.add(new LEDBmp(-1));
@@ -138,9 +138,9 @@ public class LEDBmpFragment extends Fragment {
         LEDBmp ledBmp = new LEDBmp(-1);
         subLEDBmpLists.add(ledBmp);
         for (LEDBmp subLEDBmpList : subLEDBmpLists) {
-            Log.d("====getViewPagerItem","  id = 》》》 " + subLEDBmpList.getId());
+            Log.d("====getViewPagerItem", "  id = " + subLEDBmpList.getId() + " , filePath = " + subLEDBmpList.getFilePath() + " , resourceId = " + subLEDBmpList.getResourceID() + " , content = " + subLEDBmpList.getContent());
         }
-        Log.d("====getViewPagerItem","  " + isEditMode);
+        Log.d("====getViewPagerItem", "  " + isEditMode);
         gridView.setAdapter(new LEDBmpGridViewAdapter(getActivity(), subLEDBmpLists, isEditMode));
         gridView.setNumColumns(mColumns);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -152,11 +152,11 @@ public class LEDBmpFragment extends Fragment {
                     } else {
                         ImageView ledView = (ImageView) view.findViewById(R.id.led_img);
                         LEDBmp ledBmp1 = subLEDBmpLists.get(position);
-                        if(!isEditMode) {
+                        if (!isEditMode) {
                             if (ledBmp1 != null && ledBmp1.getId() > 0) {
-                                listener.onLEDBmpChoice(ledBmp1, BitmapUtils.loadBitmapFromView(ledView, ViewUtils.dp2px(getContext(), 33), ViewUtils.dp2px(getContext(), 33),false));
+                                listener.onLEDBmpChoice(ledBmp1, BitmapUtils.loadBitmapFromView(ledView, ViewUtils.dp2px(getContext(), 33), ViewUtils.dp2px(getContext(), 33), false));
                             }
-                        }else {
+                        } else {
                             if (ledBmp1 != null && ledBmp1.getId() > 0) {
                                 listener.onLEDBmpDelete(ledBmp1);
                                 refreshLEDBmpView(isEditMode);
@@ -184,7 +184,7 @@ public class LEDBmpFragment extends Fragment {
         return gridView;
     }
 
-    private void showNormalDialog(final LEDBmp ledBmp){
+    private void showNormalDialog(final LEDBmp ledBmp) {
         /* @setIcon 设置对话框图标
          * @setTitle 设置对话框标题
          * @setMessage 设置对话框消息提示
@@ -198,8 +198,8 @@ public class LEDBmpFragment extends Fragment {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(getContext(),SavePictureActivity.class);
-                        intent.putExtra(SavePictureActivity.LEDBMP_UNDER_EDITING,ledBmp);
+                        Intent intent = new Intent(getContext(), SavePictureActivity.class);
+                        intent.putExtra(SavePictureActivity.LEDBMP_UNDER_EDITING, ledBmp);
                         getContext().startActivity(intent);
                     }
                 });
@@ -229,7 +229,9 @@ public class LEDBmpFragment extends Fragment {
 
     public interface OnLEDBmpClickListener {
         void onLEDBmpChoice(LEDBmp ledBmp, Bitmap bitmap);
+
         void onLEDBmpDelete(LEDBmp ledBmp);
+
         void onLEDBmpAdd();
     }
 }

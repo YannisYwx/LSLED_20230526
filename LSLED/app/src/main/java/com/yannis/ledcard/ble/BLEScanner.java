@@ -5,7 +5,6 @@ import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static com.yannis.ledcard.ble.BleDevice.DEVICE_NAME;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
 import android.bluetooth.BluetoothAdapter;
@@ -106,7 +105,7 @@ public class BLEScanner {
         mScanSettings = new ScanSettings.Builder()
                 .setLegacy(false)
                 .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
-                .setReportDelay(1000)
+                .setReportDelay(10)
                 .setUseHardwareBatchingIfSupported(false)
                 .build();
         mScanFilter = new ScanFilter.Builder()
@@ -198,8 +197,14 @@ public class BLEScanner {
                     sb.append(scanDevices.get(i).getName() + scanDevices.get(i).getRssi() + ",");
                 }
                 if (scanDevices.size() > 0) {
-                    handler.post(() -> listener.onDeviceScan(scanDevices));
-                    listener.logInfo(sb.toString());
+                    handler.post(() -> {
+                        if (listener != null) {
+                            listener.onDeviceScan(scanDevices);
+                        }
+                    });
+                    if (listener != null) {
+                        listener.logInfo(sb.toString());
+                    }
                 }
             }
 
@@ -210,17 +215,22 @@ public class BLEScanner {
         };
         List<ScanFilter> filters = new ArrayList<>();
         filters.add(new ScanFilter.Builder()/*.setDeviceName("LSLED")*/.build());
-        listener.onStartScan();
+        if (listener != null) {
+            listener.onStartScan();
+        }
         Log.e("*********", "开始搜索............");
         mScanner.startScan(filters, mScanSettings, mScanCallback);
     }
 
     public void stopScanBluetoothDevice() {
+        Log.e("*********", "停止搜索............");
         isScanning = false;
         if (mScanner != null && mScanCallback != null) {
             mScanner.stopScan(mScanCallback);
         }
-        listener.onStopScan(scanDevices);
+        if (listener != null) {
+            listener.onStopScan(scanDevices);
+        }
     }
 
     public interface OnDeviceScanListener {

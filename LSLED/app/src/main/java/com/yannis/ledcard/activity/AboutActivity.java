@@ -27,6 +27,12 @@ public class AboutActivity extends BaseActivity {
     TextView enduserAgmentTv;
     @BindView(R.id.tv_privacyPolicy)
     TextView privacyPolicyTv;
+    @BindView(R.id.tv_toolbar_left)
+    public TextView tvLeft;
+    @BindView(R.id.tv_right)
+    public TextView tvRight;
+    @BindView(R.id.tv_toolbar_center)
+    public TextView tvContext;
 
     @Override
     protected void init() {
@@ -35,8 +41,9 @@ public class AboutActivity extends BaseActivity {
 
     @Override
     protected void initData() {
+        tvContext.setText(R.string.about);
         String versionName = getLocalVersionName(this);
-        mTextView.setText("VersionName : "+versionName);
+        mTextView.setText("VersionName : " + versionName);
     }
 
     @Override
@@ -54,14 +61,19 @@ public class AboutActivity extends BaseActivity {
 
     }
 
+    @OnClick({R.id.iv_back})
+    public void onBackClick() {
+        finish();
+    }
+
     @OnClick(R.id.tv_enduserAgreement)
     public void showAgreement() {
-        HtmlActivity.start(this,0);
+        HtmlActivity.start(this, 0);
     }
 
     @OnClick(R.id.tv_privacyPolicy)
     public void showPolicy() {
-        HtmlActivity.start(this,1);
+        HtmlActivity.start(this, 1);
     }
 
 

@@ -3,4 +3,13 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="black">#000000</color>
+    <color name="dialogErrorBackgroundColor">#C1272D</color>
+    <color name="dialogInfoBackgroundColor">#2866BF</color>
+    <color name="dialogNoticeBackgroundColor">#737373</color>
+    <color name="dialogProgressBackgroundColor">#2866BF</color>
+    <color name="dialogSuccessBackgroundColor">#00b576</color>
+    <color name="dialogWarningBackgroundColor">#f2c304</color>
+    <color name="white">#FFFFFF</color>
 </resources>

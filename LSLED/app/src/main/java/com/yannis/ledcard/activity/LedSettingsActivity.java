@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -31,7 +32,6 @@ import com.yannis.ledcard.bean.LEDBmp;
 import com.yannis.ledcard.bean.LedImg;
 import com.yannis.ledcard.bean.SendContent;
 import com.yannis.ledcard.util.BitmapUtils;
-import com.yannis.ledcard.util.DialogUtil;
 import com.yannis.ledcard.util.PermisionUtils;
 import com.yannis.ledcard.widget.ItemView;
 
@@ -39,6 +39,7 @@ import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -89,6 +90,7 @@ public class LedSettingsActivity extends BaseActivity implements LEDBmpFragment.
     private boolean isEditMode = false;
 
     private LEDBmpFragment mLEDBmpFragment;
+    String[] modelArray = null;
 
     @Override
     protected void init() {
@@ -96,9 +98,14 @@ public class LedSettingsActivity extends BaseActivity implements LEDBmpFragment.
 
     @Override
     protected void initData() {
+        modelArray = getResources().getStringArray(R.array.modestr);
         PermisionUtils.verifyStoragePermissions(this);
-        tvRight.setText("删除图片");
-        tvRight.setVisibility(View.VISIBLE);
+        if(LedBleApplication.instance.isJapanApp()) {
+            tvRight.setVisibility(View.INVISIBLE);
+        } else {
+            tvRight.setText(R.string.delete_pic);
+            tvRight.setVisibility(View.VISIBLE);
+        }
         tvLeft.setText(getString(R.string.return_back));
         index = getIntent().getIntExtra(MainActivity.LED_SEND_CONTENT_INDEX, 0);
 //        ledImgList = LedDataUtil.getLedImgList();
@@ -118,6 +125,9 @@ public class LedSettingsActivity extends BaseActivity implements LEDBmpFragment.
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fl, mLEDBmpFragment);
         fragmentTransaction.commit();
+        if(LedBleApplication.instance.isJapanApp()){
+            findViewById(R.id.fl).setVisibility(View.GONE);
+        }
         mLEDBmpFragment.setEditText(et_content);
     }
 
@@ -151,27 +161,41 @@ public class LedSettingsActivity extends BaseActivity implements LEDBmpFragment.
         return R.layout.activity_led_settings;
     }
 
+    int currentType = 0;
+    int currentDefaultIndex = 0;
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onClick(View view) {
+        Intent speedModelIntent = new Intent(this, SpeedAndModelSelectActivity.class);
         switch (view.getId()) {
             case R.id.item_mode:
-                DialogUtil.showWheelViewDialog(this, DialogUtil.DialogMode.MODE, sendContent.getMode() - 1, getString(R.string.mode), new DialogUtil.OnWheelViewSelectListener() {
-                    @Override
-                    public void OnWheelViewSelect(Object obj, int index) {
-                        itemViewMode.setValue((String) obj);
-                        sendContent.setMode(index + 1);
-                    }
-                });
+                currentType = 1;
+                currentDefaultIndex = sendContent.getMode() - 1;
+                speedModelIntent.putExtra(SpeedAndModelSelectActivity.SETTING_TYPE, currentType);
+                speedModelIntent.putExtra(SpeedAndModelSelectActivity.DEFAULT_SELECT_INDEX, currentDefaultIndex);
+                startActivityForResult(speedModelIntent, 8964);
+//                DialogUtil.showWheelViewDialog(this, DialogUtil.DialogMode.MODE, sendContent.getMode() - 1, getString(R.string.mode), new DialogUtil.OnWheelViewSelectListener() {
+//                    @Override
+//                    public void OnWheelViewSelect(Object obj, int index) {
+//                        itemViewMode.setValue((String) obj);
+//                        sendContent.setMode(index + 1);
+//                    }
+//                });
                 break;
             case R.id.item_speed:
-                DialogUtil.showWheelViewDialog(this, DialogUtil.DialogMode.SPEED, sendContent.getSpeed() - 1, getString(R.string.speed), new DialogUtil.OnWheelViewSelectListener() {
-                    @Override
-                    public void OnWheelViewSelect(Object obj, int index) {
-                        itemViewSpeed.setValue((String) obj);
-                        sendContent.setSpeed(index + 1);
-                    }
-                });
+                currentType = 0;
+                currentDefaultIndex = sendContent.getSpeed() - 1;
+                speedModelIntent.putExtra(SpeedAndModelSelectActivity.SETTING_TYPE, currentType);
+                speedModelIntent.putExtra(SpeedAndModelSelectActivity.DEFAULT_SELECT_INDEX, currentDefaultIndex);
+                startActivityForResult(speedModelIntent, 8964);
+//                DialogUtil.showWheelViewDialog(this, DialogUtil.DialogMode.SPEED, sendContent.getSpeed() - 1, getString(R.string.speed), new DialogUtil.OnWheelViewSelectListener() {
+//                    @Override
+//                    public void OnWheelViewSelect(Object obj, int index) {
+//                        itemViewSpeed.setValue((String) obj);
+//                        sendContent.setSpeed(index + 1);
+//                    }
+//                });
                 break;
             case R.id.tv_toolbar_left:
                 Intent intent = new Intent();
@@ -205,6 +229,25 @@ public class LedSettingsActivity extends BaseActivity implements LEDBmpFragment.
 //                break;
             default:
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 8964) {
+            if (data != null) {
+                currentType = data.getIntExtra(SpeedAndModelSelectActivity.SETTING_TYPE, 0);
+                currentDefaultIndex = data.getIntExtra(SpeedAndModelSelectActivity.DEFAULT_SELECT_INDEX, 0);
+            }
+            Log.e("-设置速度和模式-", "type = " + currentType + " , defaultSelectIndex = " + currentDefaultIndex);
+            if (currentType == 0) {
+                itemViewSpeed.setValue((currentDefaultIndex + 1) + "");
+                sendContent.setSpeed(currentDefaultIndex + 1);
+            } else if (currentType == 1) {
+                itemViewMode.setValue(modelArray[currentDefaultIndex]);
+                sendContent.setMode(currentDefaultIndex + 1);
+            }
         }
     }
 

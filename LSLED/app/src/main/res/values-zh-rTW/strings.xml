@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">LEDBadge</string>
     <string name="title_sendList">发送列表</string>
     <string name="settings">设置</string>
     <string name="edit">编辑</string>
     <string name="about">關於</string>
     <string name="return_back">返回</string>
-    <string name="delete_pic">删除图片</string>
     <string name="edit_pic">编辑图片</string>
     <string name="pick_pic">选择图片</string>
     <string name="origin_pic">[原图]</string>
@@ -21,6 +19,7 @@
     <string name="no_data">沒有數據</string>
     <string name="cancel">取消</string>
     <string name="send_content">發送內容</string>
+    <string name="scan_list">搜尋列表</string>
 
     <array name="speedStr">
         <item>1</item>
@@ -88,4 +87,8 @@
     <string name="scan_device_failed">搜索失败</string>
     <string name="user_agreement">用戶協議&#160;&#160;</string>
     <string name="privacy_policy">&#160;&#160;隱私政策</string>
+    <string name="delete_pic">刪除圖片</string>
+    <string name="permission_locaiton_content">掃描藍牙設備需要定位許可權</string>
+    <string name="bluetooth_scan_permission">掃描設備需允許應用訪問周圍藍牙設備並保持藍牙開關開啟。 你可以在設置中進行管理</string>
+    <string name="bluetooth_is_close">藍牙開關已關閉，請開啟手機藍牙</string>
 </resources>

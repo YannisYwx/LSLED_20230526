@@ -1,12 +1,16 @@
 package com.yannis.ledcard;
 
+import static com.yannis.ledcard.activity.MainActivity.TAG;
+
 import android.annotation.SuppressLint;
 import android.app.Service;
 import android.bluetooth.BluetoothDevice;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.util.Log;
 
 import com.hjq.toast.ToastUtils;
@@ -40,6 +44,8 @@ public class LedBleApplication extends LitePalApplication {
     private List<LEDBmp> dbLEDBmpList = new ArrayList<>();
 
     public static float _TEXT_SIZE = 0F;
+
+    public Handler uiHandler = new Handler(Looper.getMainLooper());
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -88,7 +94,6 @@ public class LedBleApplication extends LitePalApplication {
             Log.d("App-ble", "：服务绑定失败");
             bleService = null;
         }
-
     };
 
     public void initBleDevice(BluetoothDevice device) {
@@ -108,8 +113,10 @@ public class LedBleApplication extends LitePalApplication {
 
 
     public void initDevice() {
+        Log.e(TAG, "===================>.................initDevice");
         if (bleDevice.getDevice() != null) {
             if (bleService != null && isConnected) {
+                Log.e(TAG, "===================>.................setBleWrite");
                 bleDevice.setBleWrite(bleService.getCharacteristicByMacAndName(bleDevice.getDevice(), BleDevice.UUID_SERVICE, BleDevice.UUID_CHARACTERISTICS_WRITE));
             }
         }
@@ -197,5 +204,13 @@ public class LedBleApplication extends LitePalApplication {
             }
         }
         return null;
+    }
+
+    /**
+     * 是否是日本APP
+     */
+    public boolean isJapanApp(){
+        String packageName = getPackageName();
+        return packageName.equals("com.yannis.flexsign");
     }
 }

@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.annotation.StringRes;
@@ -57,6 +58,8 @@ public class MainPresenter extends BasePresenter<MainContract.View, MainContract
     private boolean isSendFinished = true;
     private boolean mReceiverTag = false; //广播接受者标识位
 
+    private String selectAddress;
+
     /**
      * 是否是点击了发送按钮发送
      */
@@ -94,6 +97,11 @@ public class MainPresenter extends BasePresenter<MainContract.View, MainContract
 
     public MainPresenter(MainContract.View view) {
         super(view);
+    }
+
+    @Override
+    public void setSelectAddress(String macAddress) {
+        this.selectAddress = macAddress;
     }
 
     @Override
@@ -148,14 +156,20 @@ public class MainPresenter extends BasePresenter<MainContract.View, MainContract
             }
         }
         if (isSelect) {
-            view.startScan();
-            view.showMsg(getString(R.string.searching));
-            bleScanner.startScanBluetoothDevice();
             isBtnScanAndSendData = true;
+            if (TextUtils.isEmpty(selectAddress)) {
+                view.startScan();
+                view.showMsg(getString(R.string.searching));
+                initBle();
+                bleScanner.startScanBluetoothDevice();
+            } else {
+                //直接发送
+                connectDevice();
+            }
+
         } else {
             view.showMsg(getActivity().getString(R.string.cannot_send_empty));
         }
-
     }
 
     @Override
@@ -191,6 +205,11 @@ public class MainPresenter extends BasePresenter<MainContract.View, MainContract
     }
 
     @Override
+    public void stopScanDevice() {
+        bleScanner.stopScanBluetoothDevice();
+    }
+
+    @Override
     public void testParseData(List<SendContent> sendContentList, int matrix) {
         mode.getSendLedData(sendContentList, matrix);
     }
@@ -210,6 +229,7 @@ public class MainPresenter extends BasePresenter<MainContract.View, MainContract
         if (!TextUtils.isEmpty(device.getName())) {
             if (device.getName().contains(BleDevice.DEVICE_NAME)) {
                 LedBleApplication.instance.setDevice(device);
+                Log.e(TAG, "===================onDeviceScan>>>>> isConnected = false");
                 LedBleApplication.instance.isConnected = false;
                 isScanDeviceSuccess = true;
                 bleScanner.stopScanBluetoothDevice();
@@ -252,14 +272,48 @@ public class MainPresenter extends BasePresenter<MainContract.View, MainContract
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    view.showMsg(getString(R.string.connecting));
+//                    view.showMsg(getString(R.string.connecting));
+                    view.connectDevice();
                     LedBleApplication.instance.connectDevice();
                 }
             }, 100);
         } else {
-            view.showMsg(getString(R.string.connecting));
+//            view.showMsg(getString(R.string.connecting));
+            view.connectDevice();
             LedBleApplication.instance.connectDevice();
         }
+
+//        if (TextUtils.isEmpty(selectAddress)) {
+//            Log.e(TAG, "无-走旧版逻辑：" + selectAddress);
+//            if (LedBleApplication.instance.isConnected) {
+//                LedBleApplication.instance.disconnectDevice();
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        view.showMsg(getString(R.string.connecting));
+//                        LedBleApplication.instance.connectDevice();
+//                    }
+//                }, 100);
+//            } else {
+//                view.showMsg(getString(R.string.connecting));
+//                view.connectDevice();
+//                LedBleApplication.instance.connectDevice();
+//            }
+//        } else {
+//            //有连接地址
+//            if (LedBleApplication.instance.isConnected) {
+//                Log.e(TAG, "有mac地址-已连接，直接发送 ：" + selectAddress);
+//                //直接发送
+//                view.showMsg("有mac地址-以连接，直接发送");
+//                sendDataWithResponse();
+//            } else {
+//                view.showMsg("有mac地址-未连接，先连接");
+//                Log.e(TAG, "有mac地址-未连接，，先连接 ：" + selectAddress);
+//                view.showMsg(getString(R.string.connecting));
+//                view.connectDevice();
+//                LedBleApplication.instance.connectDevice();
+//            }
+//        }
     }
 
     /**
@@ -277,7 +331,7 @@ public class MainPresenter extends BasePresenter<MainContract.View, MainContract
             if (byteArrays.size() > 0) {
                 sendPackageSizeCount = mode.getSendPackageSize();
                 Log.e(TAG, "发送数据---------> No." + count + "---" + Thread.currentThread().getName());
-                view.showMsg(getString(R.string.sending_data));
+//                view.showMsg(getString(R.string.sending_data));
                 LedBleApplication.instance.write(byteArrays.get(count));
             } else {
                 view.showMsg("发送内容有误，无法识别");
@@ -288,7 +342,7 @@ public class MainPresenter extends BasePresenter<MainContract.View, MainContract
     ///////////////////////////////////////////////////////////////////////////
     // 每次发送都是在连接成功后才开始的
     ///////////////////////////////////////////////////////////////////////////
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
+    private final BroadcastReceiver receiver = new BroadcastReceiver() {
         String macAddress;
         String action;
         String uuid = null;
@@ -300,9 +354,11 @@ public class MainPresenter extends BasePresenter<MainContract.View, MainContract
             switch (action) {
                 case BLEService.GATT_CONNECTED:
                 case BLEService.GATT_SERVICE_DISCOVERED_FAIL:
+                    Log.e(TAG, "===================GATT_SERVICE_DISCOVERED_FAIL>>>>> isConnected = false");
                     LedBleApplication.instance.isConnected = false;
                     break;
                 case BLEService.GATT_DISCONNECTED:
+                    Log.e(TAG, "===================GATT_DISCONNECTED>>>>> isConnected = false");
                     LedBleApplication.instance.isConnected = false;
 //                    if (!isSendFinished) {
 //                        //如果是发送成功 断开就不做任何事 反之isSendFinished=false 则是在发送中
@@ -315,6 +371,7 @@ public class MainPresenter extends BasePresenter<MainContract.View, MainContract
                 case BLEService.GATT_SERVICE_DISCOVERED_SUCCESS:
                     LedBleApplication.instance.isConnected = true;
                     view.showMsg(getString(R.string.connect_success));
+                    view.connectSuccess();
                     view.scanSuccess();
                     LedBleApplication.instance.initDevice();
                     sendDataWithResponse();
@@ -332,7 +389,7 @@ public class MainPresenter extends BasePresenter<MainContract.View, MainContract
                     }
                     if (count == (sendPackageSizeCount - 1)) {
                         stopTimer();//
-                        view.showMsg(getString(R.string.send_data_over));
+//                        view.showMsg(getString(R.string.send_data_over));
                         count = 0;
                         sendPackageSizeCount = 0;
                         isSending = false;
@@ -346,7 +403,7 @@ public class MainPresenter extends BasePresenter<MainContract.View, MainContract
                             }
                         }, 500); //发送结束
                     } else {
-                        view.showMsg(getString(R.string.sending_data));
+//                        view.showMsg(getString(R.string.sending_data));
                         if (count == 3) {
                             count++;
                             SystemClock.sleep(300);
@@ -379,7 +436,8 @@ public class MainPresenter extends BasePresenter<MainContract.View, MainContract
                 @Override
                 public void run() {
                     //超时了
-                    view.showMsg(getString(R.string.send_timeout));
+//                    view.showMsg(getString(R.string.send_timeout));
+                    view.sendTimeout();
                     count = 0;
                     sendPackageSizeCount = 0;
                     view.setSendBtnIsEnable(true);

@@ -1,7 +1,10 @@
 package com.yannis.ledcard.ble;
 
+import static com.yannis.ledcard.activity.MainActivity.TAG;
+
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.util.Log;
 
 import java.util.UUID;
 
@@ -41,6 +44,7 @@ public class BleDevice implements Comparable<Object> {
     }
 
     public void setBleWrite(BluetoothGattCharacteristic bleWrite) {
+        Log.e(TAG, "===================>.................bleWrite = " + bleWrite);
         this.bleWrite = bleWrite;
     }
 

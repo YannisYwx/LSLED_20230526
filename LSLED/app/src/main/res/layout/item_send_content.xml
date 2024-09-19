@@ -6,8 +6,7 @@
     android:layout_gravity="center_vertical"
     android:padding="10dp"
     android:foreground="?android:attr/selectableItemBackground"
-    android:descendantFocusability="blocksDescendants"
-    >
+    android:descendantFocusability="blocksDescendants">
 
     <TextView
         android:id="@+id/tv_index"

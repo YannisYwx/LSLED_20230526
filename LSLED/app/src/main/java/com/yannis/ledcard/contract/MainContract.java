@@ -27,6 +27,14 @@ public interface MainContract {
 
         void showMsg(String msg);
 
+        void connectDevice();
+
+        void connectSuccess();
+
+        void sendTimeout();
+
+        void sendFailed();
+
         void startScan();
 
         void scanSuccess();
@@ -55,12 +63,15 @@ public interface MainContract {
          */
         void sendData(List<SendContent> sendContentList, int matrix);
 
+        void setSelectAddress(String macAddress);
 
         void registerBroadcastReceiver();
 
         void unregisterReceiver();
 
         void startScanDevice();
+
+        void stopScanDevice();
 
         void testParseData(List<SendContent> sendContentList, int matrix);
     }

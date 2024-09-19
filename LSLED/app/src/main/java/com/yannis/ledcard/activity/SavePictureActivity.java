@@ -116,16 +116,13 @@ public class SavePictureActivity extends BaseActivity {
 
         ivScroll.setText(R.string.scroll_btn);
         ledBig.setIsCanTouch(true);
-        ledBig.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    hscrollview.requestDisallowInterceptTouchEvent(false);
-                } else {
-                    hscrollview.requestDisallowInterceptTouchEvent(true);
-                }
-                return false;
+        ledBig.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                hscrollview.requestDisallowInterceptTouchEvent(false);
+            } else {
+                hscrollview.requestDisallowInterceptTouchEvent(true);
             }
+            return false;
         });
         tvRight.setText(R.string.pick_pic);
         tvRight.setVisibility(View.VISIBLE);
@@ -144,13 +141,13 @@ public class SavePictureActivity extends BaseActivity {
         height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, height, getResources().getDisplayMetrics());
         mImagePicker.setFocusWidth(width);
         mImagePicker.setFocusHeight(height);
-        if(ledBmp ==null) {
+        if (ledBmp == null) {
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < matrix * matrix; i++) {
                 sb.append("0");
             }
             ledBig.setLEDData(sb.toString());
-        }else {
+        } else {
 //            titleBW.setVisibility(View.INVISIBLE);
 //            titleOrigin.setVisibility(View.INVISIBLE);
 //            sb.setVisibility(View.INVISIBLE);
@@ -160,7 +157,7 @@ public class SavePictureActivity extends BaseActivity {
             llSb.removeAllViews();
             llpics.removeAllViews();
 
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             params.topMargin = 100;
             llLEDs.setLayoutParams(params);
 
@@ -189,10 +186,9 @@ public class SavePictureActivity extends BaseActivity {
                 bitmapTmp = BitmapUtils.convertToBMW(bitmapTmp, bitmap.get().getWidth(), bitmap.get().getHeight(), progress);
                 ivWB.setImageBitmap(bitmapTmp);
                 int pix = PrefUtils.getIntFromPrefs(SavePictureActivity.this, PIX, 11);
-                if(bitmap.get().getWidth() > bitmap.get().getHeight()) {
+                if (bitmap.get().getWidth() > bitmap.get().getHeight()) {
                     bleBitmap = new SoftReference<>(BitmapUtils.scaleBitmap(bitmapTmp, bitmap.get().getWidth(), pix));
-                }
-                else
+                } else
                     bleBitmap = new SoftReference<>(BitmapUtils.scaleBitmap(bitmapTmp, pix, pix));
             }
 
@@ -202,7 +198,7 @@ public class SavePictureActivity extends BaseActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                if(bleBitmap != null)
+                if (bleBitmap != null)
                     ledBig.setLEDData(LedDataUtil.getLedData(bleBitmap.get()));
             }
         });
@@ -227,31 +223,30 @@ public class SavePictureActivity extends BaseActivity {
                 String content = ledBig.getLedData();
                 DisplayMetrics dm = getResources().getDisplayMetrics();
                 int screenWidth = dm.widthPixels;
-                boolean isLongPic = (ledBig.getWidth() > screenWidth)?true:false;
+                boolean isLongPic = (ledBig.getWidth() > screenWidth) ? true : false;
                 List<LEDBmp> ledBmps = DataSupport.where("content = ? and matrix = ?", content, matrix + "").find(LEDBmp.class);
                 if (ledBmps != null && ledBmps.size() > 0) {
                     showToast(getResources().getString(R.string.same_model_exist));
-                } else if (ledBmp == null){
+                } else if (ledBmp == null) {
                     String fileName = BitmapUtils.generateFileName();
                     String dir = BitmapUtils.getBmpDir();
                     LEDBmp ledBmp = new LEDBmp(content, matrix, dir + fileName);
                     ledBmp.save();
                     BitmapUtils.saveBitmapToBmpFile(BitmapUtils.loadBitmapFromView(ledBig
-                            , ViewUtils.dp2px(this, 33), ViewUtils.dp2px(this, 33), isLongPic)
+                                    , ViewUtils.dp2px(this, 33), ViewUtils.dp2px(this, 33), isLongPic)
                             , fileName);
                     showToast(getResources().getString(R.string.save_msg_success));
-                }else {
-                    Log.d("SAVING...","here");
+                } else {
+                    Log.d("SAVING...", "here");
                     String dir = BitmapUtils.getBmpDir();
                     String fileName;
-                    if(ledBmp.getFilePath() != null) {
+                    if (ledBmp.getFilePath() != null) {
                         fileName = ledBmp.getFilePath().replace(dir, "");
-                    }
-                    else {
+                    } else {
                         fileName = BitmapUtils.generateFileName();
                     }
                     BitmapUtils.saveBitmapToBmpFile(BitmapUtils.loadBitmapFromView(ledBig
-                            , ViewUtils.dp2px(this, 33), ViewUtils.dp2px(this, 33), isLongPic)
+                                    , ViewUtils.dp2px(this, 33), ViewUtils.dp2px(this, 33), isLongPic)
                             , fileName);
                     ContentValues contentValues = new ContentValues();
                     contentValues.put("content", content);
@@ -262,14 +257,14 @@ public class SavePictureActivity extends BaseActivity {
                 LedBleApplication.instance.loadLEDBmpFromDB();
                 break;
             case R.id.iv_clear:
-                if(ledBmp == null) {
+                if (ledBmp == null) {
                     ledBig.clear();
-                }else {
+                } else {
                     ledBig.setLEDData(ledBmp.getContent());
                 }
                 break;
             case R.id.iv_scroll:
-                if(ivScroll.getText().toString() == getResources().getString(R.string.scroll_btn)) {
+                if (ivScroll.getText().toString() == getResources().getString(R.string.scroll_btn)) {
                     ivScroll.setText(R.string.draw_btn);
                     ledBig.setIsCanTouch(false);
                     ledBig.setOnTouchListener(new View.OnTouchListener() {
@@ -283,8 +278,7 @@ public class SavePictureActivity extends BaseActivity {
                             return true;
                         }
                     });
-                }
-                else {
+                } else {
                     ivScroll.setText(R.string.scroll_btn);
                     ledBig.setIsCanTouch(true);
                     ledBig.setOnTouchListener(new View.OnTouchListener() {
@@ -327,14 +321,13 @@ public class SavePictureActivity extends BaseActivity {
                 Bitmap bitmap1 = BitmapUtils.convertToBMW(bitmap.get(), bitmap.get().getWidth(), bitmap.get().getHeight(), 80);
                 ivWB.setImageBitmap(bitmap1);
                 int pix = PrefUtils.getIntFromPrefs(this, PIX, 11);
-                Log.e("Long Pic","DETECTED width : " + bitmap.get().getWidth() + "  height : "+ bitmap.get().getHeight());
-                if(bitmap.get().getWidth() > bitmap.get().getHeight()) {
-                    int a = (int)Math.ceil(bitmap.get().getWidth() * pix/bitmap.get().getHeight());
-                    Log.e("Long Pic","DETECTED width : " + a);
+                Log.e("Long Pic", "DETECTED width : " + bitmap.get().getWidth() + "  height : " + bitmap.get().getHeight());
+                if (bitmap.get().getWidth() > bitmap.get().getHeight()) {
+                    int a = (int) Math.ceil(bitmap.get().getWidth() * pix / bitmap.get().getHeight());
+                    Log.e("Long Pic", "DETECTED width : " + a);
                     bleBitmap = new SoftReference<>(BitmapUtils.scaleBitmap(bitmap1, a, pix));
                     llLeds.removeView(ledBig);
-                }
-                else {
+                } else {
                     bleBitmap = new SoftReference<>(BitmapUtils.scaleBitmap(bitmap1, pix, pix));
                     llLeds.removeView(ledBig);
                 }

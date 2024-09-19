@@ -7,26 +7,57 @@ def releaseTime() {
 android {
     compileSdkVersion 33
     defaultConfig {
-        applicationId "com.yannis.ledcard"
         minSdkVersion 18
         targetSdkVersion 33
-        versionCode 49//发布新版本修改这里wangdelin leshan,lesun.jks
-        versionName "3.5.1"
+        versionCode 53//发布新版本修改这里wangdelin leshan,lesun.jks
+        versionName "3.5.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
+    sourceSets {
+
+        lesun {
+            res.srcDirs += ['src\\lesun\\res']
+        }
+
+        jap {
+            res.srcDirs += ['src\\jap\\res']
+        }
+
+    }
+    /*LED显示屏发送软件*/
+    flavorDimensions "region"
+    productFlavors {
+        lesun {
+            dimension "region"
+            applicationId "com.yannis.ledcard"
+        }
+
+        jap {
+            dimension "region"
+            applicationId "com.yannis.flexsign"
+            resValue("string", "app_name", "FLEX Sign anode")
+
+//            release {
+//                keyAlias 'theochendev'
+//                keyPassword '159753'
+//                storeFile file('D:\\DemoCode\\android\\LSLED_JAP\\theochen.jks')
+//                storePassword '159753'
+//            }
+        }
+
+    }
+
+
     buildTypes {
         release {
-
             // 混淆
             minifyEnabled false
-
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-
 //            applicationVariants.all { variant ->
 //                variant.outputs.all { output ->
 //                    def outputFile = output.outputFile
 //                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
-//
 //                        // apk_-版本号-版本名称-编译时间.apk
 //                        def fileName = "LSLED-${defaultConfig.versionCode}-${defaultConfig.versionName}-${releaseTime()}.apk"
 //                        outputFileName = fileName
@@ -94,5 +125,5 @@ dependencies {
     implementation 'com.github.getActivity:ToastUtils:10.5'
 
     implementation 'com.karumi:dexter:6.2.2' //权限管理
-
+//    implementation 'com.github.blennerSilva:AwesomeDialog:2.0.5'
 }

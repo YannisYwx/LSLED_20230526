@@ -1,12 +1,9 @@
 <resources>
-    <string name="app_name">LEDBadge</string>
-
     <string name="title_sendList">SEND LIST</string>
     <string name="settings">SETTINGS</string>
     <string name="edit">EDIT</string>
     <string name="about">ABOUT</string>
     <string name="return_back">Return</string>
-    <string name="delete_pic">DELETE PIC</string>
     <string name="edit_pic">EDIT PIC</string>
     <string name="pick_pic">PICK PIC</string>
     <string name="origin_pic">[ORIGIN]</string>
@@ -20,6 +17,12 @@
     <string name="no_data">NO DATA</string>
     <string name="cancel">Cancel</string>
     <string name="send_content">SEND CONTENT</string>
+    <string name="scan_list">Scan List</string>
+
+    <string name="dialog_neutral_button">Neutral</string>
+    <string name="dialog_no_button">No</string>
+    <string name="dialog_ok_button">Ok</string>
+    <string name="dialog_yes_button">Yes</string>
 
     <array name="speedStr">
         <item>1</item>
@@ -99,4 +102,8 @@ By clicking "Agree and continue", you mean that you have read and agree to the a
     <string name="privacy_policy_and_user_agreement">Privacy Policy &amp; User Agreement </string>
     <string name="reject">Reject</string>
     <string name="agree">Agree</string>
+    <string name="delete_pic">Delete picture</string>
+    <string name="bluetooth_scan_permission">Scanning device needs to allow app to access nearby Bluetooth devices and keep Bluetooth on. You can manage in Settings app.</string>
+    <string name="permission_locaiton_content">Scanning for Bluetooth devices requires location permission</string>
+    <string name="bluetooth_is_close">The Bluetooth switch is off, please turn on the Bluetooth on your phone</string>
 </resources>

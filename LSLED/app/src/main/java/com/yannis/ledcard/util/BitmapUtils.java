@@ -38,9 +38,13 @@ import java.util.regex.Pattern;
  */
 public class BitmapUtils {
     private static final String TAG = "BitmapUtils";
-    private static final String sdCardDirPath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator;// SD卡的根目录地址
+    //    private static final String sdCardDirPath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator;// SD卡的根目录地址
     private static final String APP_DIR = "LED_BMP" + File.separator;
     private static SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss", Locale.CHINA);
+
+    public static String getExternalFilesDir() {
+        return LedBleApplication.instance.getExternalFilesDir(null) + File.separator;
+    }
 
     /**
      * 转为二值图像
@@ -194,8 +198,7 @@ public class BitmapUtils {
         Bitmap bmp;
         if (isLongPic) {
             bmp = Bitmap.createBitmap(h, h, Bitmap.Config.ARGB_8888);
-        }
-        else {
+        } else {
             bmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
         }
         Canvas c = new Canvas(bmp);
@@ -230,7 +233,7 @@ public class BitmapUtils {
         int bufferSize = nBmpHeight * (nBmpWidth * 3 + nBmpWidth % 4);
         try {
             // 存储文件名
-            File dir = new File(sdCardDirPath + APP_DIR);
+            File dir = new File(getExternalFilesDir() + APP_DIR);
             if (Environment.getExternalStorageState().equals(
                     Environment.MEDIA_MOUNTED)) {
                 if (!dir.exists()) {
@@ -323,7 +326,7 @@ public class BitmapUtils {
     }
 
     public static String generateFileName() {
-        return "LEDBmp_" + sdf.format(new Date()) ;
+        return "LEDBmp_" + sdf.format(new Date());
     }
 
     /**
@@ -332,11 +335,11 @@ public class BitmapUtils {
      * @return
      */
     public static String generateFilePath() {
-        return sdCardDirPath + APP_DIR + generateFileName();
+        return getExternalFilesDir() + APP_DIR + generateFileName();
     }
 
     public static String getBmpDir() {
-        return sdCardDirPath + APP_DIR;
+        return getExternalFilesDir() + APP_DIR;
     }
 
     /**
@@ -345,7 +348,7 @@ public class BitmapUtils {
      * @return
      */
     public static String getBitmapSaveDir() {
-        return sdCardDirPath + APP_DIR;
+        return getExternalFilesDir() + APP_DIR;
     }
 
 
@@ -355,7 +358,7 @@ public class BitmapUtils {
             String idStr = name.replace("[LED", "");
             idStr = idStr.replace("]", "");
             int id = Integer.parseInt(idStr);
-            LEDBmp ledBmp = LedBleApplication.instance.getLEDBmpById(id,11);
+            LEDBmp ledBmp = LedBleApplication.instance.getLEDBmpById(id, 11);
 //            LEDBmp ledBmp = DataSupport.find(LEDBmp.class, id);
             String filePath = ledBmp.getFilePath();
             if (new File(filePath).exists()) {

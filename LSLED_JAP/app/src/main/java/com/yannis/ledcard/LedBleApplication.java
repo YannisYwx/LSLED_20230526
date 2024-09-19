@@ -108,7 +108,6 @@ public class LedBleApplication extends LitePalApplication {
                 bleDevice.setBleWrite(bleService.getCharacteristicByMacAndName(bleDevice.getDevice(), BleDevice.UUID_SERVICE, BleDevice.UUID_CHARACTERISTICS_WRITE));
             }
         }
-
     }
 
     public void write(byte[] data) {
@@ -142,7 +141,6 @@ public class LedBleApplication extends LitePalApplication {
             bleService.disconnect();
         }
     }
-
 
     public void connectDevice() {
         if (bleService != null && !isConnected) {
